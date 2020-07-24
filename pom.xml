@@ -24,6 +24,7 @@
 		<java.version>14</java.version>
 		<itext.version>7.1.12</itext.version>
 		<bouncycastle.version>1.66</bouncycastle.version>
+		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 
 	<dependencies>
