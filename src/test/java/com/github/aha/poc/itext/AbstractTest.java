@@ -4,17 +4,15 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_1_7;
 
 import java.io.File;
 
-import org.junit.BeforeClass;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.BeforeAll;
 
 import com.itextpdf.kernel.pdf.WriterProperties;
 
-@SpringBootTest
-public abstract class AbstractTest {
+abstract class AbstractTest {
 	
 	protected static final String RESULT_PATH = "target";
 	
-	@BeforeClass
+	@BeforeAll
 	public static void checkOrCreatePath() {
 		File f = new File(RESULT_PATH);
 		if (!f.exists()) {

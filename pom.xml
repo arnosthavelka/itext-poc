@@ -34,23 +34,6 @@
 			<version>${itext.version}</version>
 			<type>pom</type>
 		</dependency>
-		<!-- due to ava.lang.NoClassDefFoundError: org/bouncycastle/asn1/ASN1Encodable -->
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>${bouncycastle.version}</version>
-		    <type>jar</type>
-		    <scope>compile</scope>
-		    <optional>true</optional>
-		</dependency>
-		<dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcpkix-jdk15on</artifactId>
-		    <version>${bouncycastle.version}</version>
-		    <type>jar</type>
-		    <scope>compile</scope>
-		    <optional>true</optional>
-		</dependency>		
 			
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
