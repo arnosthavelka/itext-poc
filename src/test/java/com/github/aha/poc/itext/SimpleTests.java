@@ -2,19 +2,18 @@ package com.github.aha.poc.itext;
 
 import java.io.FileOutputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
+@DisplayName("Basic tests in JUnit5")
 public class SimpleTests extends AbstractTest {
 
-	/** Path to the resulting PDF file. */
 	public static final String RESULT = RESULT_PATH + "/hello.pdf";
-	
 
 	@Test
 	public void testSimpleHelloWorld() throws Exception {

@@ -2,22 +2,20 @@ package com.github.aha.poc.itext;
 
 import java.io.FileOutputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 
-/**
- * Test PDF password and restrict (remove) copy permission. 
- */
+@DisplayName("iText security features")
 public class EncryptionTests extends AbstractTest {
 
-	/** Path to the resulting PDF file. */
 	public static final String RESULT = RESULT_PATH + "/encryption.pdf";
-	
 
 	@Test
+	@DisplayName("add password and restrict (remove) copy permission")
 	public void testEncryption() throws Exception {
 		
 	    PdfReader reader = new PdfReader("hello-source.pdf");
