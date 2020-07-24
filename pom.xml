@@ -5,7 +5,7 @@
 
 	<groupId>com.github.aha.poc.itext</groupId>
 	<artifactId>itext-poc</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>itext-poc</name>
@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>14</java.version>
-		<itext.version>7.1.11</itext.version>
+		<itext.version>7.1.12</itext.version>
 		<bouncycastle.version>1.66</bouncycastle.version>
 	</properties>
 
