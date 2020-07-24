@@ -21,17 +21,17 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
-		<itext.version>5.5.13.1</itext.version>
+		<java.version>14</java.version>
+		<itext.version>7.1.11</itext.version>
 		<bouncycastle.version>1.66</bouncycastle.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
+			<artifactId>itext7-core</artifactId>
 			<version>${itext.version}</version>
-			<type>jar</type>
+			<type>pom</type>
 		</dependency>
 		<!-- due to ava.lang.NoClassDefFoundError: org/bouncycastle/asn1/ASN1Encodable -->
 		<dependency>
