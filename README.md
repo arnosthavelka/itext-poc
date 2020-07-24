@@ -3,7 +3,7 @@
 This repository holds examples for testing/validation of iText features.
 
 ## Pre-requisities
-* JDK 14 (with preview features enabled -> `--enable-preview`)
+* JDK 14
 * Maven 3.6
 * Lombok (installed into the IDE)
 

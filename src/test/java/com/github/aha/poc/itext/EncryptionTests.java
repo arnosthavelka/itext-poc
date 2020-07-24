@@ -16,13 +16,13 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 
 @DisplayName("iText security features")
-public class EncryptionTests extends AbstractTest {
+class EncryptionTests extends AbstractTest {
 
 	public static final String RESULT = RESULT_PATH + "/encryption.pdf";
 
 	@Test
 	@DisplayName("add password and restrict (remove) copy permission")
-	public void testEncryption() throws Exception {
+	void testEncryption() throws Exception {
 		try (Document document = new Document(createDocument(RESULT))) {
 			Paragraph paragraph = new Paragraph("secured");
 			paragraph.setFixedPosition(20, 0, 100);
