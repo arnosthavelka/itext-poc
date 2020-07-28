@@ -18,6 +18,7 @@ This repository holds examples for testing/validation of iText features.
 |               | iText                 | 7.1.11       | PDF generation                           |
 |               | Lombok                | 1.18.12      | Simplification of Java classes           |
 |               | Spring Boot           | 2.3.1        | Simplification of dependencies           |
+|               | Lorem                 | 2.1          | Library for LoremIpsum texts             |
 | **Testing**   |                       |              |                                          |
 |               | JUnit                 | 5.6.2        | Unit testing with JUnit5                 |
 |               | AssertJ               | 3.16.1       | Assertions with Fluent API               |
