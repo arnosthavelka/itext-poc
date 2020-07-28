@@ -15,13 +15,13 @@ This repository holds examples for testing/validation of iText features.
 | **General**   |                       |              |                                          |
 |               | Maven                 | 3.6.x        | Build                                    |
 |               | Java                  | 14           | Language Java  (code and tests)          |
-|               | iText                 | 7.1.11       | PDF generation                           |
+|               | iText                 | 7.1.12       | PDF generation                           |
 |               | Lombok                | 1.18.12      | Simplification of Java classes           |
-|               | Spring Boot           | 2.3.1        | Simplification of dependencies           |
+|               | Spring Boot           | 2.3.3        | Simplification of dependencies           |
+|               | Lorem                 | 2.1          | Library for LoremIpsum texts             |
 | **Testing**   |                       |              |                                          |
-|               | JUnit                 | 5.6.2        | Unit testing with JUnit5                 |
-|               | AssertJ               | 3.16.1       | Assertions with Fluent API               |
-|               | Mockito               | 3.3.3        |                                          |
+|               | JUnit                 | by SB        | Unit testing with JUnit5                 |
+|               | AssertJ               | by SB        | Assertions with Fluent API               |
 
 [travis-url-main]: https://travis-ci.org/arnosthavelka/itext-poc
 [travis-image]: https://travis-ci.org/arnosthavelka/itext-poc.svg?branch=master
