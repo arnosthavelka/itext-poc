@@ -55,7 +55,9 @@ public class DocumentBuilder {
 	}
 
 	void addTitle(String text) {
-		document.add(new Paragraph(text));
+		Paragraph titleElement = new Paragraph(text);
+		titleElement.setBold();
+		document.add(titleElement);
 	}
 
 	void addParagraph(String text) {
