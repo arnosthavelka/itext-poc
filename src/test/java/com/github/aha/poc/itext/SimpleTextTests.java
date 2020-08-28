@@ -68,7 +68,7 @@ class SimpleTextTests extends AbstractTest {
 
 	@Test
 	@DisplayName("Compare catalog of generated PDF with the stored PDF")
-	void comparePdfByCatalof() throws Exception {
+	void comparePdfByCatalog() throws Exception {
 		var title = "viris tantas prompta";
 		var content = "Sententiaeeum repudiare tale.  Sapientemcum dicant hac vel tale nominavi dui in graecis curabitur definiebas quod torquent nunc ullamcorper invidunt mutat possit definitionem.  Nihillobortis aliquid utamur similique mucius praesent in wisi tortor inani latine ocurreret epicurei inceptos eu magnis mollis detraxit.  Persiusaffert pretium erat ex.  Curaemea blandit penatibus cum.  ";
 
