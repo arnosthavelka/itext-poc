@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 // https://github.com/itext/itext7/blob/develop/kernel/src/test/java/com/itextpdf/kernel/pdf/PdfStringTest.java
 // https://sodocumentation.net/itext/topic/5790/page-events--itext-5--versus-event-handlers-and-renderers--itext-7-
 // https://stackoverflow.com/questions/40951776/manipulate-paths-color-etc-in-itext
+// comparing PDF & Bruno's response: https://stackoverflow.com/questions/13703190/itext-api-for-pdf-comparison
 
 @DisplayName("Simple checking PDF by the text content")
 @Slf4j
@@ -68,7 +69,7 @@ class SimpleTextTests extends AbstractTest {
 
 	@Test
 	@DisplayName("Compare catalog of generated PDF with the stored PDF")
-	void comparePdfByCatalof() throws Exception {
+	void comparePdfByCatalog() throws Exception {
 		var title = "viris tantas prompta";
 		var content = "Sententiaeeum repudiare tale.  Sapientemcum dicant hac vel tale nominavi dui in graecis curabitur definiebas quod torquent nunc ullamcorper invidunt mutat possit definitionem.  Nihillobortis aliquid utamur similique mucius praesent in wisi tortor inani latine ocurreret epicurei inceptos eu magnis mollis detraxit.  Persiusaffert pretium erat ex.  Curaemea blandit penatibus cum.  ";
 
