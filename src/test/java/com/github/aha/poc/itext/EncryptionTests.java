@@ -2,6 +2,7 @@ package com.github.aha.poc.itext;
 
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
+import static com.itextpdf.kernel.pdf.PdfVersion.PDF_1_7;
 
 import java.io.IOException;
 
@@ -36,6 +37,12 @@ class EncryptionTests extends AbstractTest {
 		wp.setStandardEncryption("aha".getBytes(), null, ALLOW_PRINTING /* | EncryptionConstants.ALLOW_COPY */, ENCRYPTION_AES_256);
 		PdfWriter writer = new PdfWriter(RESULT, wp);
 		return new PdfDocument(reader, writer);
+	}
+
+	protected WriterProperties buildWriterProperties() {
+		WriterProperties wp = new WriterProperties();
+		wp.setPdfVersion(PDF_1_7);
+		return wp;
 	}
 
 }
