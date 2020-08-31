@@ -1,6 +1,5 @@
 package com.github.aha.poc.itext;
 
-import static com.itextpdf.kernel.pdf.PdfVersion.PDF_1_7;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
@@ -38,9 +37,8 @@ public class DocumentBuilder {
 	}
 
 	PdfDocument createDocument(String targetFilename) {
-		PdfWriter writer;
 		try {
-			writer = new PdfWriter(targetFilename, buildWriterProperties());
+			PdfWriter writer = new PdfWriter(targetFilename, buildWriterProperties());
 			return new PdfDocument(writer);
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
@@ -50,7 +48,7 @@ public class DocumentBuilder {
 
 	WriterProperties buildWriterProperties() {
 		WriterProperties wp = new WriterProperties();
-		wp.setPdfVersion(PDF_1_7);
+		wp.setPdfVersion(pdfVersion);
 		return wp;
 	}
 

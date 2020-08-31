@@ -20,8 +20,6 @@ import com.itextpdf.kernel.pdf.canvas.parser.data.IEventData;
 import com.itextpdf.kernel.pdf.canvas.parser.data.TextRenderInfo;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.IEventListener;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.itextpdf.kernel.utils.CompareTool;
-import com.itextpdf.kernel.utils.CompareTool.CompareResult;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
@@ -37,8 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @DisplayName("Simple checking PDF by the text content")
 @Slf4j
 class SimpleTextTests extends AbstractTest {
-
-	public static final String GENERATED_PDF = RESULT_PATH + "/hello.pdf";
 
 	private static Lorem lorem = LoremIpsum.getInstance();
 
@@ -64,22 +60,6 @@ class SimpleTextTests extends AbstractTest {
 			log.info("\n\ntest value={}", pdfDocument.getFirstPage().getPdfObject());
 			String text = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
 			assertThat(text).startsWith(title);
-		}
-	}
-
-	@Test
-	@DisplayName("Compare catalog of generated PDF with the stored PDF")
-	void comparePdfByCatalog() throws Exception {
-		var title = "viris tantas prompta";
-		var content = "Sententiaeeum repudiare tale.  Sapientemcum dicant hac vel tale nominavi dui in graecis curabitur definiebas quod torquent nunc ullamcorper invidunt mutat possit definitionem.  Nihillobortis aliquid utamur similique mucius praesent in wisi tortor inani latine ocurreret epicurei inceptos eu magnis mollis detraxit.  Persiusaffert pretium erat ex.  Curaemea blandit penatibus cum.  ";
-
-		generatePDF(title, content);
-
-		try (
-				PdfDocument sourcePdfDocument = new PdfDocument(new PdfReader("simple.pdf"));
-				PdfDocument generatedPdfDocument = new PdfDocument(new PdfReader(GENERATED_PDF))) {
-			CompareResult result = new CompareTool().compareByCatalog(generatedPdfDocument, sourcePdfDocument);
-			assertThat(result.isOk()).isTrue();
 		}
 	}
 
@@ -138,14 +118,6 @@ class SimpleTextTests extends AbstractTest {
 			return Set.of(RENDER_TEXT);
 		}
 
-	}
-
-	private void generatePDF(String title, String content) {
-		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_PDF);
-		documentBuilder.init();
-		documentBuilder.addTitle(title);
-		documentBuilder.addParagraph(content);
-		documentBuilder.generateDocument();
 	}
 
 }
