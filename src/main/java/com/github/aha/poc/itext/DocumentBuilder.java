@@ -38,7 +38,7 @@ public class DocumentBuilder {
 
 	PdfDocument createDocument(String targetFilename) {
 		try {
-			PdfWriter writer = new PdfWriter(targetFilename, buildWriterProperties());
+			PdfWriter writer = new PdfWriter(targetFilename, buildWriterProperties()); // NOSONAR
 			return new PdfDocument(writer);
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
