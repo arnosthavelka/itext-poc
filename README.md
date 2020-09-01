@@ -1,7 +1,7 @@
 # iText-poc
 [![Travis Build Status][travis-image]][travis-url-main] [![Sonar quality gate][sonar-quality-gate]][sonar-url] [![Sonar coverage][sonar-coverage]][sonar-url] [![Sonar bugs][sonar-bugs]][sonar-url] [![Sonar vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-This repository holds examples for testing/validation of iText features.
+This repository holds examples for testing/validation of [iText 7](https://github.com/itext/itext7) features.
 
 ## Pre-requisities
 * JDK 14

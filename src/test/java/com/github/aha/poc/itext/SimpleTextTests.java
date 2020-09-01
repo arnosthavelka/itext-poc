@@ -26,7 +26,6 @@ import com.thedeanda.lorem.LoremIpsum;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-// https://github.com/itext/itext7
 // https://github.com/itext/itext7/blob/develop/kernel/src/test/java/com/itextpdf/kernel/pdf/PdfStringTest.java
 // https://sodocumentation.net/itext/topic/5790/page-events--itext-5--versus-event-handlers-and-renderers--itext-7-
 // https://stackoverflow.com/questions/40951776/manipulate-paths-color-etc-in-itext
