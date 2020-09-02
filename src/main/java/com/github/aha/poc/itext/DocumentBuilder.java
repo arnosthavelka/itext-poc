@@ -1,5 +1,7 @@
 package com.github.aha.poc.itext;
 
+import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
+import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
@@ -29,16 +31,23 @@ public class DocumentBuilder {
 	Document document;
 
 	public void init() {
-		document = new Document(createDocument(targetFile));
+		document = new Document(createDocument(targetFile, buildWriterProperties()));
+	}
+
+	public void initWithPassword(byte[] userPassword, byte[] ownerPassword) {
+		WriterProperties writerProperties = buildWriterProperties();
+		writerProperties.setStandardEncryption(userPassword, ownerPassword, ALLOW_PRINTING /* | EncryptionConstants.ALLOW_COPY */,
+				ENCRYPTION_AES_256);
+		document = new Document(createDocument(targetFile, writerProperties));
 	}
 
 	public void generateDocument() {
 		document.close();
 	}
 
-	PdfDocument createDocument(String targetFilename) {
+	PdfDocument createDocument(String targetFilename, WriterProperties writerProperties) {
 		try {
-			PdfWriter writer = new PdfWriter(targetFilename, buildWriterProperties()); // NOSONAR
+			PdfWriter writer = new PdfWriter(targetFilename, writerProperties); // NOSONAR
 			return new PdfDocument(writer);
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
