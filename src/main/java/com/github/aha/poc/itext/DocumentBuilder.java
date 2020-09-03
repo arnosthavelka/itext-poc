@@ -31,11 +31,11 @@ public class DocumentBuilder {
 	Document document;
 
 	public void init() {
-		document = new Document(createDocument(targetFile, buildWriterProperties()));
+		document = new Document(createDocument(targetFile, buildWriterProperties(pdfVersion)));
 	}
 
 	public void initWithPassword(byte[] userPassword, byte[] ownerPassword) {
-		WriterProperties writerProperties = buildWriterProperties();
+		WriterProperties writerProperties = buildWriterProperties(pdfVersion);
 		writerProperties.setStandardEncryption(userPassword, ownerPassword, ALLOW_PRINTING /* | EncryptionConstants.ALLOW_COPY */,
 				ENCRYPTION_AES_256);
 		document = new Document(createDocument(targetFile, writerProperties));
@@ -47,7 +47,7 @@ public class DocumentBuilder {
 
 	PdfDocument createDocument(String targetFilename, WriterProperties writerProperties) {
 		try {
-			PdfWriter writer = new PdfWriter(targetFilename, writerProperties); // NOSONAR
+			PdfWriter writer = createPdfWriter(targetFilename, writerProperties);
 			return new PdfDocument(writer);
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
@@ -55,9 +55,13 @@ public class DocumentBuilder {
 		}
 	}
 
-	WriterProperties buildWriterProperties() {
+	PdfWriter createPdfWriter(String targetFilename, WriterProperties writerProperties) throws FileNotFoundException {
+		return new PdfWriter(targetFilename, writerProperties); // NOSONAR
+	}
+
+	WriterProperties buildWriterProperties(PdfVersion version) {
 		WriterProperties wp = new WriterProperties();
-		wp.setPdfVersion(pdfVersion);
+		wp.setPdfVersion(version);
 		return wp;
 	}
 
