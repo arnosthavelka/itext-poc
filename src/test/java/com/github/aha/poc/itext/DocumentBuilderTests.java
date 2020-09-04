@@ -24,6 +24,12 @@ class DocumentBuilderTests {
 	}
 
 	@Test
+	@DisplayName("should create instance of DocumentBuilder")
+	void creationWithNull() throws FileNotFoundException {
+		assertThrows(NullPointerException.class, () -> new DocumentBuilder(null));
+	}
+
+	@Test
 	@DisplayName("should handle FileNotFoundException ")
 	void createDocumentWithFailure() throws FileNotFoundException {
 		var writeProperties = mock(WriterProperties.class);
