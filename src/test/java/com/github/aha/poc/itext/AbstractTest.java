@@ -20,9 +20,14 @@ abstract class AbstractTest {
 	}
 
 	protected void generatePDF(String title, String content) {
+		DocumentBuilder documentBuilder = initPdf();
+		addPdfContent(title, content, documentBuilder);
+	}
+
+	protected DocumentBuilder initPdf() {
 		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_PDF);
 		documentBuilder.init();
-		addPdfContent(title, content, documentBuilder);
+		return documentBuilder;
 	}
 
 	protected void generateSecuredPDF(String userPassword, String title, String content) {

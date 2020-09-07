@@ -6,11 +6,14 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
 
+import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
+import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 
 import lombok.NonNull;
@@ -73,6 +76,13 @@ public class DocumentBuilder {
 
 	void addParagraph(String text) {
 		document.add(new Paragraph(text));
+	}
+
+	void addQrCode(String content) {
+		BarcodeQRCode code = new BarcodeQRCode(content);
+		PdfFormXObject codeImage = code.createFormXObject(document.getPdfDocument());
+		Image codeQrImage = new Image(codeImage);
+		document.add(codeQrImage);
 	}
 
 }
