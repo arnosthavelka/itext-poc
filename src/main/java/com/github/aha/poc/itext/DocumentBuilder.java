@@ -6,12 +6,16 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
 
+import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
+import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.renderer.IRenderer;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -65,14 +69,38 @@ public class DocumentBuilder {
 		return wp;
 	}
 
-	void addTitle(String text) {
-		Paragraph titleElement = new Paragraph(text);
+	public void addTitle(String text) {
+		Paragraph titleElement = createParagraph(text);
 		titleElement.setBold();
 		document.add(titleElement);
 	}
 
-	void addParagraph(String text) {
-		document.add(new Paragraph(text));
+	public void addParagraph(String text) {
+		document.add(createParagraph(text));
+	}
+
+	public void addQrCode(String code) {
+		Paragraph codeLabel = createParagraph(code);
+		BarcodeQRCode codeObject = new BarcodeQRCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		Image codeQrImage = new Image(codeImage);
+		codeQrImage.setWidth(200);
+//		codeQrImage.setWidth(getElementWidth(codeLabel));
+		document.add(codeQrImage);
+		document.add(codeLabel);
+	}
+
+	private float getElementWidth(Paragraph element) {
+		IRenderer paragraphRenderer = element.createRendererSubTree();
+		return paragraphRenderer.getOccupiedArea().getBBox().getWidth();
+//		LayoutResult result = paragraphRenderer.setParent(document.getRenderer()).
+//				layout(new LayoutContext(new LayoutArea(1, new Rectangle(1000, 1000))));
+//		
+//		return result.getOccupiedArea().getBBox().getWidth();
+	}
+
+	Paragraph createParagraph(String text) {
+		return new Paragraph(text);
 	}
 
 }
