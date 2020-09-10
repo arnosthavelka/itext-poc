@@ -15,7 +15,6 @@ import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.renderer.IRenderer;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -84,19 +83,13 @@ public class DocumentBuilder {
 		BarcodeQRCode codeObject = new BarcodeQRCode(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
 		Image codeQrImage = new Image(codeImage);
-		codeQrImage.setWidth(200);
-//		codeQrImage.setWidth(getElementWidth(codeLabel));
+		codeQrImage.setWidth(getPageWidth() / 4);
 		document.add(codeQrImage);
 		document.add(codeLabel);
 	}
 
-	private float getElementWidth(Paragraph element) {
-		IRenderer paragraphRenderer = element.createRendererSubTree();
-		return paragraphRenderer.getOccupiedArea().getBBox().getWidth();
-//		LayoutResult result = paragraphRenderer.setParent(document.getRenderer()).
-//				layout(new LayoutContext(new LayoutArea(1, new Rectangle(1000, 1000))));
-//		
-//		return result.getOccupiedArea().getBBox().getWidth();
+	private float getPageWidth() {
+		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}
 
 	Paragraph createParagraph(String text) {
