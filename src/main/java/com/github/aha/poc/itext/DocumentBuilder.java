@@ -6,6 +6,9 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
 
+import com.itextpdf.barcodes.Barcode128;
+import com.itextpdf.barcodes.Barcode39;
+import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfVersion;
@@ -78,6 +81,18 @@ public class DocumentBuilder {
 		document.add(createParagraph(text));
 	}
 
+	public void addBarcode39(String code) {
+		document.add(createBarcode39Image(code));
+	}
+
+	public void addBarcode128(String code) {
+		document.add(createBarcode128Image(code));
+	}
+
+	public void addBarcodeEAN(String code) {
+		document.add(createBarcodeEANImage(code));
+	}
+
 	public void addQrCode(String code) {
 		document.add(createQrCodeImage(code));
 		document.add(createParagraph(code));
@@ -91,11 +106,38 @@ public class DocumentBuilder {
 		return new Paragraph(text);
 	}
 
+	Image createBarcode39Image(String code) {
+		Barcode39 codeObject = new Barcode39(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcode128Image(String code) {
+		Barcode128 codeObject = new Barcode128(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcodeEANImage(String code) {
+		BarcodeEAN codeObject = new BarcodeEAN(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
 	Image createQrCodeImage(String code) {
 		BarcodeQRCode codeObject = new BarcodeQRCode(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, true);
+	}
+
+	private Image createCodeImage(PdfFormXObject codeImage, boolean setWidth) {
 		Image codeQrImage = new Image(codeImage);
-		codeQrImage.setWidth(getPageWidth() / 4);
+		if (setWidth) {
+			codeQrImage.setWidth(getPageWidth() / 4);
+		}
 		return codeQrImage;
 	}
 
