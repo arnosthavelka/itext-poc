@@ -76,7 +76,6 @@ class SimpleTextTests extends AbstractTest {
 	}
 
 	@Test
-	@DisplayName("Load page content as set of lines")
 	void loadPageContentAsLines() throws Exception {
 		String title = lorem.getWords(3);
 		String content = lorem.getParagraphs(2, 4);

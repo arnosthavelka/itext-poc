@@ -6,11 +6,18 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 
 import java.io.FileNotFoundException;
 
+import com.itextpdf.barcodes.Barcode128;
+import com.itextpdf.barcodes.Barcode39;
+import com.itextpdf.barcodes.BarcodeEAN;
+import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
+import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 
 import lombok.NonNull;
@@ -61,18 +68,84 @@ public class DocumentBuilder {
 
 	WriterProperties buildWriterProperties(PdfVersion version) {
 		WriterProperties wp = new WriterProperties();
+		wp.addXmpMetadata();
 		wp.setPdfVersion(version);
 		return wp;
 	}
 
-	void addTitle(String text) {
-		Paragraph titleElement = new Paragraph(text);
+	public void addTitle(String text) {
+		Paragraph titleElement = createParagraph(text);
 		titleElement.setBold();
 		document.add(titleElement);
 	}
 
-	void addParagraph(String text) {
-		document.add(new Paragraph(text));
+	public void addParagraph(String text) {
+		document.add(createParagraph(text));
+	}
+
+	public void addBarcode39(String code) {
+		document.add(createBarcode39Image(code));
+	}
+
+	public void addBarcode128(String code) {
+		document.add(createBarcode128Image(code));
+	}
+
+	public void addBarcodeEAN(String code) {
+		document.add(createBarcodeEANImage(code));
+	}
+
+	public void addQrCode(String code) {
+		document.add(createQrCodeImage(code));
+		document.add(createParagraph(code));
+	}
+
+	public void addMetadata(String title) {
+		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
+		documentInfo.setTitle(title);
+	}
+
+	private float getPageWidth() {
+		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
+	}
+
+	Paragraph createParagraph(String text) {
+		return new Paragraph(text);
+	}
+
+	Image createBarcode39Image(String code) {
+		Barcode39 codeObject = new Barcode39(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcode128Image(String code) {
+		Barcode128 codeObject = new Barcode128(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcodeEANImage(String code) {
+		BarcodeEAN codeObject = new BarcodeEAN(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createQrCodeImage(String code) {
+		BarcodeQRCode codeObject = new BarcodeQRCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, true);
+	}
+
+	private Image createCodeImage(PdfFormXObject codeImage, boolean setWidth) {
+		Image codeQrImage = new Image(codeImage);
+		if (setWidth) {
+			codeQrImage.setWidth(getPageWidth() / 4);
+		}
+		return codeQrImage;
 	}
 
 }
