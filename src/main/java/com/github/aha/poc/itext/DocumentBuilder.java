@@ -3,6 +3,7 @@ package com.github.aha.poc.itext;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
+import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
 
@@ -77,6 +78,7 @@ public class DocumentBuilder {
 		Paragraph titleElement = createParagraph(text);
 		titleElement.setBold();
 		document.add(titleElement);
+		addMetadata(text, null, null, null);
 	}
 
 	public void addParagraph(String text) {
@@ -100,9 +102,20 @@ public class DocumentBuilder {
 		document.add(createParagraph(code));
 	}
 
-	public void addMetadata(String title) {
+	public void addMetadata(String title, String subject, String author, String creator) {
 		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
-		documentInfo.setTitle(title);
+		if (nonNull(title)) {
+			documentInfo.setTitle(title);
+		}
+		if (nonNull(subject)) {
+			documentInfo.setSubject(subject);
+		}
+		if (nonNull(author)) {
+			documentInfo.setAuthor(author);
+		}
+		if (nonNull(creator)) {
+			documentInfo.setCreator(creator);
+		}
 	}
 
 	private float getPageWidth() {
