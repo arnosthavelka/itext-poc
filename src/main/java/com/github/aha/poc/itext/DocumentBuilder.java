@@ -118,6 +118,11 @@ public class DocumentBuilder {
 		}
 	}
 
+	public void addCustomMetadadata(@NonNull String key, @NonNull String value) {
+		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
+		documentInfo.setMoreInfo(key, value);
+	}
+
 	private float getPageWidth() {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}

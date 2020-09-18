@@ -16,6 +16,8 @@ import com.thedeanda.lorem.LoremIpsum;
 @DisplayName("verify PDF metadata feature")
 class MetadataTests extends AbstractTest {
 
+	private static final String VERSION_PROPERTY = "version";
+
 	private static Lorem lorem = LoremIpsum.getInstance();
 
 	@Test
@@ -56,6 +58,23 @@ class MetadataTests extends AbstractTest {
 			assertThat(documentInfo.getSubject()).isEqualTo(subject);
 			assertThat(documentInfo.getAuthor()).isEqualTo(author);
 			assertThat(documentInfo.getCreator()).isEqualTo(creator);
+		}
+	}
+
+	@Test
+	void addCustomMetadata() throws Exception {
+		var title = lorem.getWords(3);
+		var version = "1.5.2";
+		String targetPdf = RESULT_PATH + "/example-matadata.pdf";
+
+		DocumentBuilder documentBuilder = preparePdf(targetPdf);
+		documentBuilder.addTitle(title);
+		documentBuilder.addCustomMetadadata(VERSION_PROPERTY, version);
+		documentBuilder.generateDocument();
+
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+			PdfDocumentInfo documentInfo = pdfDocument.getDocumentInfo();
+			assertThat(documentInfo.getMoreInfo(VERSION_PROPERTY)).isEqualTo(version);
 		}
 	}
 
