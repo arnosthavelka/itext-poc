@@ -7,6 +7,8 @@ import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
 
+import javax.validation.constraints.NotNull;
+
 import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
@@ -118,7 +120,7 @@ public class DocumentBuilder {
 		}
 	}
 
-	public void addCustomMetadadata(@NonNull String key, @NonNull String value) {
+	public void addCustomMetadadata(@NotNull String key, @NotNull String value) {
 		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
 		documentInfo.setMoreInfo(key, value);
 	}
