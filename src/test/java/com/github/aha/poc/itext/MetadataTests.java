@@ -1,8 +1,10 @@
 package com.github.aha.poc.itext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -61,21 +63,38 @@ class MetadataTests extends AbstractTest {
 		}
 	}
 
-	@Test
-	void addCustomMetadata() throws Exception {
-		var title = lorem.getWords(3);
-		var version = "1.5.2";
-		String targetPdf = RESULT_PATH + "/example-matadata.pdf";
+	@Nested
+	class CustomMetadata {
 
-		DocumentBuilder documentBuilder = preparePdf(targetPdf);
-		documentBuilder.addTitle(title);
-		documentBuilder.addCustomMetadadata(VERSION_PROPERTY, version);
-		documentBuilder.generateDocument();
+		@Test
+		void addEntry() throws Exception {
+			var title = lorem.getWords(3);
+			var version = "1.5.2";
+			String targetPdf = RESULT_PATH + "/example-matadata.pdf";
 
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
-			PdfDocumentInfo documentInfo = pdfDocument.getDocumentInfo();
-			assertThat(documentInfo.getMoreInfo(VERSION_PROPERTY)).isEqualTo(version);
+			DocumentBuilder documentBuilder = preparePdf(targetPdf);
+			documentBuilder.addTitle(title);
+			documentBuilder.addCustomMetadadata(VERSION_PROPERTY, version);
+			documentBuilder.generateDocument();
+
+			try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+				PdfDocumentInfo documentInfo = pdfDocument.getDocumentInfo();
+				assertThat(documentInfo.getMoreInfo(VERSION_PROPERTY)).isEqualTo(version);
+			}
 		}
+
+		@Test
+		void failOnNullKey() throws Exception {
+			assertThrows(NullPointerException.class,
+					() -> preparePdf(RESULT_PATH + "/example-dummy.pdf").addCustomMetadadata(VERSION_PROPERTY, null));
+		}
+
+		@Test
+		void failOnNullValue() throws Exception {
+			assertThrows(NullPointerException.class,
+					() -> preparePdf(RESULT_PATH + "/example-dummy.pdf").addCustomMetadadata(null, "5.5.5"));
+		}
+
 	}
 
 }
