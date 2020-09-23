@@ -6,13 +6,13 @@ import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -133,31 +133,34 @@ public class DocumentBuilder {
 	}
 
 	public void addWatermark(String watermark) throws Exception {
-		PdfDocument pdfDoc = document.getPdfDocument();
-
 		int fontSize = 100;
-		PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-		Paragraph paragraph = new Paragraph(watermark)
-				.setFont(font)
-				.setFontSize(fontSize);
+		Paragraph paragraph = createWatermarkParagraph(watermark, fontSize);
 
-		PdfExtGState gs1 = new PdfExtGState().setFillOpacity(0.5f);
+		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
-		// Implement transformation matrix usage in order to scale image
-		for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
-
-			PdfPage pdfPage = pdfDoc.getPage(i);
-			Rectangle pageSize = pdfPage.getPageSizeWithRotation();
-
-			float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
-			float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-			PdfCanvas over = new PdfCanvas(pdfDoc.getPage(i));
-			over.saveState();
-			over.setExtGState(gs1);
-			document.showTextAligned(paragraph, x - fontSize / 2, y, i, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
-			over.restoreState();
+		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
+			addWatermarkToPage(i, paragraph, transparentGraphicState, fontSize);
 		}
+	}
 
+	private Paragraph createWatermarkParagraph(String watermark, int fontSize) throws IOException {
+		return new Paragraph(watermark)
+				.setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+				.setFontSize(fontSize);
+	}
+
+	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
+		PdfDocument pdfDoc = document.getPdfDocument();
+		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
+		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
+
+		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
+		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
+		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
+		over.saveState();
+		over.setExtGState(graphicState);
+		document.showTextAligned(paragraph, x - fontSize / 2, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
+		over.restoreState();
 	}
 
 	private float getPageWidth() {
