@@ -39,8 +39,8 @@ class SimpleTextTests extends AbstractTest {
 
 	@Test
 	void testBuilder() throws Exception {
-		String title = lorem.getWords(3);
-		String content = lorem.getParagraphs(2, 4);
+		var title = lorem.getWords(3);
+		var content = lorem.getParagraphs(2, 4);
 
 		generatePDF(title, content);
 
@@ -65,8 +65,8 @@ class SimpleTextTests extends AbstractTest {
 	@Test
 	@DisplayName("Load page content as single (whole) text")
 	void loadPageContentAsValue() throws Exception {
-		String title = lorem.getWords(3);
-		String content = lorem.getParagraphs(2, 4);
+		var title = lorem.getWords(3);
+		var content = lorem.getParagraphs(2, 4);
 
 		generatePDF(title, content);
 
@@ -77,8 +77,8 @@ class SimpleTextTests extends AbstractTest {
 
 	@Test
 	void loadPageContentAsLines() throws Exception {
-		String title = lorem.getWords(3);
-		String content = lorem.getParagraphs(2, 4);
+		var title = lorem.getWords(3);
+		var content = lorem.getParagraphs(2, 4);
 
 		generatePDF(title, content);
 
