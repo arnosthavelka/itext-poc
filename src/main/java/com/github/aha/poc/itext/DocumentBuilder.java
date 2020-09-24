@@ -159,7 +159,8 @@ public class DocumentBuilder {
 		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
-		document.showTextAligned(paragraph, x - fontSize / 2, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
+		int xOffset = fontSize / 2;
+		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
 		over.restoreState();
 	}
 
