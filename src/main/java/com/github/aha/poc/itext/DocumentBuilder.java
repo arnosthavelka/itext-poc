@@ -13,6 +13,7 @@ import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -132,7 +133,7 @@ public class DocumentBuilder {
 		documentInfo.setMoreInfo(key, value);
 	}
 
-	public void addWatermark(String watermark) throws Exception {
+	public void addWatermark(String watermark) {
 		int fontSize = 100;
 		Paragraph paragraph = createWatermarkParagraph(watermark, fontSize);
 
@@ -143,10 +144,18 @@ public class DocumentBuilder {
 		}
 	}
 
-	private Paragraph createWatermarkParagraph(String watermark, int fontSize) throws IOException {
-		return new Paragraph(watermark)
-				.setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
-				.setFontSize(fontSize);
+	private Paragraph createWatermarkParagraph(String watermark, int fontSize) {
+			return new Paragraph(watermark)
+					.setFont(createFont(StandardFonts.HELVETICA))
+					.setFontSize(fontSize);
+	}
+
+	private PdfFont createFont(String fontType) {
+		try {
+			return PdfFontFactory.createFont(fontType);
+		} catch (IOException e) {
+			throw new ITextException("Fotn creation failed", e);
+		}
 	}
 
 	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
