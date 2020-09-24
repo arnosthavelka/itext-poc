@@ -1,5 +1,6 @@
 package com.github.aha.poc.itext;
 
+import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,15 @@ class DocumentBuilderTests {
 		given(docBuilder.createPdfWriter(SOME_FILE_PDF, writeProperties)).willThrow(FileNotFoundException.class);
 
 		assertThrows(ITextException.class, () -> docBuilder.createDocument(SOME_FILE_PDF, writeProperties));
+	}
+
+	@Test
+	@DisplayName("should handle IOException ")
+	void handleParagraphFailure() throws IOException {
+		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
+		given(docBuilder.createFont(HELVETICA)).willThrow(IOException.class);
+
+		assertThrows(ITextException.class, () -> docBuilder.createStyledParagraph("content", HELVETICA, 30));
 	}
 
 }

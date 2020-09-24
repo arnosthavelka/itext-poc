@@ -1,5 +1,6 @@
 package com.github.aha.poc.itext;
 
+import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
@@ -12,7 +13,6 @@ import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
@@ -135,7 +135,7 @@ public class DocumentBuilder {
 
 	public void addWatermark(String watermark) {
 		int fontSize = 100;
-		Paragraph paragraph = createWatermarkParagraph(watermark, fontSize);
+		Paragraph paragraph = createStyledParagraph(watermark, HELVETICA, fontSize);
 
 		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
@@ -144,18 +144,18 @@ public class DocumentBuilder {
 		}
 	}
 
-	private Paragraph createWatermarkParagraph(String watermark, int fontSize) {
-			return new Paragraph(watermark)
-					.setFont(createFont(StandardFonts.HELVETICA))
-					.setFontSize(fontSize);
-	}
-
-	private PdfFont createFont(String fontType) {
+	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
 		try {
-			return PdfFontFactory.createFont(fontType);
+			return new Paragraph(content)
+					.setFont(createFont(fontType))
+					.setFontSize(fontSize);
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
+	}
+
+	PdfFont createFont(String fontType) throws IOException {
+		return PdfFontFactory.createFont(fontType);
 	}
 
 	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
