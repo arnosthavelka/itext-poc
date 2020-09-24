@@ -154,7 +154,7 @@ public class DocumentBuilder {
 		try {
 			return PdfFontFactory.createFont(fontType);
 		} catch (IOException e) {
-			throw new ITextException("Fotn creation failed", e);
+			throw new ITextException("Font creation failed", e);
 		}
 	}
 
