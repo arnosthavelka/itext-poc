@@ -1,25 +1,37 @@
 package com.github.aha.poc.itext;
 
+import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
+import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
 import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocumentInfo;
+import com.itextpdf.kernel.pdf.PdfOutline;
+import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.property.VerticalAlignment;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -121,6 +133,52 @@ public class DocumentBuilder {
 	public void addCustomMetadadata(@NonNull String key, @NonNull String value) {
 		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
 		documentInfo.setMoreInfo(key, value);
+	}
+
+	public void addWatermark(String watermark) {
+		int fontSize = 100;
+		Paragraph paragraph = createStyledParagraph(watermark, HELVETICA, fontSize);
+
+		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
+
+		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
+			addWatermarkToPage(i, paragraph, transparentGraphicState, fontSize);
+		}
+	}
+
+	public void addBookmark(String title, int pageIndex) {
+		PdfOutline outlines = document.getPdfDocument().getOutlines(false);
+		PdfOutline newOutline = outlines.addOutline(title);
+		newOutline.addDestination(createFit(document.getPdfDocument().getPage(pageIndex)));
+	}
+
+	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
+		try {
+			return new Paragraph(content)
+					.setFont(createFont(fontType))
+					.setFontSize(fontSize);
+		} catch (IOException e) {
+			throw new ITextException("Font creation failed", e);
+		}
+	}
+
+	PdfFont createFont(String fontType) throws IOException {
+		return PdfFontFactory.createFont(fontType);
+	}
+
+	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
+		PdfDocument pdfDoc = document.getPdfDocument();
+		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
+		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
+
+		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
+		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
+		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
+		over.saveState();
+		over.setExtGState(graphicState);
+		int xOffset = fontSize / 2;
+		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
+		over.restoreState();
 	}
 
 	private float getPageWidth() {

@@ -8,4 +8,8 @@ public class ITextException extends RuntimeException {
 		super(message);
 	}
 
+	public ITextException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }
