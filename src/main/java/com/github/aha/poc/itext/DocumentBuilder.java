@@ -146,10 +146,10 @@ public class DocumentBuilder {
 		}
 	}
 
-	public void addBookmark(String title, int pageIndex) {
+	public void addBookmark(String title) {
 		PdfOutline outlines = document.getPdfDocument().getOutlines(false);
 		PdfOutline newOutline = outlines.addOutline(title);
-		newOutline.addDestination(createFit(document.getPdfDocument().getPage(pageIndex)));
+		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
 	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
