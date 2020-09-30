@@ -24,9 +24,9 @@ class WatermarkTests extends AbstractTest {
 
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
 		documentBuilder.addTitle(title);
-		documentBuilder.addParagraph(lorem.getParagraphs(2, 4));
-		documentBuilder.addParagraph(lorem.getParagraphs(6, 4));
-		documentBuilder.addParagraph(lorem.getParagraphs(3, 4));
+		documentBuilder.addParagraph(lorem.getParagraphs(2, 10));
+		documentBuilder.addParagraph(lorem.getParagraphs(6, 10));
+		documentBuilder.addParagraph(lorem.getParagraphs(3, 10));
 		documentBuilder.addWatermark("PREVIEW");
 		documentBuilder.generateDocument();
 

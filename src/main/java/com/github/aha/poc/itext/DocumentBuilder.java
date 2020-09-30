@@ -4,6 +4,7 @@ import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
+import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
 import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocumentInfo;
+import com.itextpdf.kernel.pdf.PdfOutline;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -142,6 +144,12 @@ public class DocumentBuilder {
 		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
 			addWatermarkToPage(i, paragraph, transparentGraphicState, fontSize);
 		}
+	}
+
+	public void addBookmark(String title) {
+		PdfOutline outlines = document.getPdfDocument().getOutlines(false);
+		PdfOutline newOutline = outlines.addOutline(title);
+		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
 	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
