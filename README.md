@@ -4,7 +4,7 @@
 This repository holds examples for testing/validation of [iText 7](https://github.com/itext/itext7) features.
 
 ## Pre-requisities
-* JDK 14
+* JDK 15
 * Maven 3.6
 * Lombok (installed into the IDE)
 
@@ -13,8 +13,6 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 | Area          | Tool                  | Version      | Description / Usage                      |
 | ----------    | --------------------- | ------------ | ---------------------------------------- |
 | **General**   |                       |              |                                          |
-|               | Maven                 | 3.6.x        | Build                                    |
-|               | Java                  | 14           | Language Java  (code and tests)          |
 |               | iText                 | 7.1.12       | PDF generation                           |
 |               | Lombok                | 1.18.12      | Simplification of Java classes           |
 |               | Spring Boot           | 2.3.4        | Just for dependency management           |
