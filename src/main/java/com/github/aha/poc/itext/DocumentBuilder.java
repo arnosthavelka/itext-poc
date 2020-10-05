@@ -14,6 +14,7 @@ import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
+import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
@@ -30,6 +31,7 @@ import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 
@@ -97,6 +99,10 @@ public class DocumentBuilder {
 		document.add(createParagraph(text));
 	}
 
+	public void addParagraph(Paragraph paragraph) {
+		document.add(paragraph);
+	}
+
 	public void addBarcode39(String code) {
 		document.add(createBarcode39Image(code));
 	}
@@ -152,14 +158,35 @@ public class DocumentBuilder {
 		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
-	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
+	Paragraph createStyledParagraph(String content, String fontName, int fontSize) {
 		try {
 			return new Paragraph(content)
-					.setFont(createFont(fontType))
+					.setFont(createFont(fontName))
 					.setFontSize(fontSize);
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
+	}
+
+	public Text createStyledText(String label, Color color, String fontFamily, boolean isBold, boolean isItalic, boolean isUnderline)
+			throws IOException {
+		Text text = new Text(label);
+		if (nonNull(color)) {
+			text.setFontColor(color);
+		}
+		if (nonNull(fontFamily)) {
+			text.setFont(createFont(fontFamily));
+		}
+		if (isBold) {
+			text.setBold();
+		}
+		if (isItalic) {
+			text.setItalic();
+		}
+		if (isUnderline) {
+			text.setUnderline();
+		}
+		return text;
 	}
 
 	PdfFont createFont(String fontType) throws IOException {
@@ -185,7 +212,7 @@ public class DocumentBuilder {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}
 
-	Paragraph createParagraph(String text) {
+	public Paragraph createParagraph(String text) {
 		return new Paragraph(text);
 	}
 

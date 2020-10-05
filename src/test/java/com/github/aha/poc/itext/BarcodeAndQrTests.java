@@ -11,13 +11,9 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
 @DisplayName("Generation of barcode & QR codes")
 class BarcodeAndQrTests extends AbstractTest {
-
-	private static Lorem lorem = LoremIpsum.getInstance();
 
 	@Test
 	@DisplayName("Add Barcode 39")
