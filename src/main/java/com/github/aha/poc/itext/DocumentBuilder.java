@@ -14,7 +14,6 @@ import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
 import com.itextpdf.barcodes.BarcodeEAN;
 import com.itextpdf.barcodes.BarcodeQRCode;
-import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
@@ -159,38 +158,43 @@ public class DocumentBuilder {
 	}
 
 	Paragraph createStyledParagraph(String content, String fontName, int fontSize) {
-		try {
-			return new Paragraph(content)
-					.setFont(createFont(fontName))
-					.setFontSize(fontSize);
-		} catch (IOException e) {
-			throw new ITextException("Font creation failed", e);
-		}
+		return new Paragraph(content)
+				.setFont(createFont(fontName))
+				.setFontSize(fontSize);
 	}
 
-	public Text createStyledText(String label, Color color, String fontFamily, boolean isBold, boolean isItalic, boolean isUnderline)
-			throws IOException {
+	public Text createStyledText(String label, TextStyle textStyle) {
 		Text text = new Text(label);
-		if (nonNull(color)) {
-			text.setFontColor(color);
+		if (nonNull(textStyle.getColor())) {
+			text.setFontColor(textStyle.getColor());
 		}
-		if (nonNull(fontFamily)) {
-			text.setFont(createFont(fontFamily));
+		if (nonNull(textStyle.getBackgroundColor())) {
+			text.setBackgroundColor(textStyle.getBackgroundColor());
 		}
-		if (isBold) {
+		if (nonNull(textStyle.getFontFamily())) {
+				text.setFont(createFont(textStyle.getFontFamily()));
+		}
+		if (textStyle.isBold()) {
 			text.setBold();
 		}
-		if (isItalic) {
+		if (textStyle.isItalic()) {
 			text.setItalic();
 		}
-		if (isUnderline) {
+		if (textStyle.isUnderline()) {
 			text.setUnderline();
+		}
+		if (textStyle.isLineThrough()) {
+			text.setLineThrough();
 		}
 		return text;
 	}
 
-	PdfFont createFont(String fontType) throws IOException {
-		return PdfFontFactory.createFont(fontType);
+	PdfFont createFont(String fontType) {
+		try {
+			return PdfFontFactory.createFont(fontType);
+		} catch (IOException e) {
+			throw new ITextException("Font creation failed", e);
+		}
 	}
 
 	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {

@@ -15,10 +15,9 @@ import static com.itextpdf.kernel.colors.ColorConstants.MAGENTA;
 import static com.itextpdf.kernel.colors.ColorConstants.ORANGE;
 import static com.itextpdf.kernel.colors.ColorConstants.PINK;
 import static com.itextpdf.kernel.colors.ColorConstants.RED;
+import static com.itextpdf.kernel.colors.ColorConstants.WHITE;
 import static com.itextpdf.kernel.colors.ColorConstants.YELLOW;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,9 @@ class StyledTextTests extends AbstractTest {
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
 		documentBuilder.addTitle(title);
 		addColors(documentBuilder);
+		addBackgroundColors(documentBuilder);
 		addFonts(documentBuilder);
+		addStyles(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
@@ -49,40 +50,59 @@ class StyledTextTests extends AbstractTest {
 		}
 	}
 
-	private void addColors(DocumentBuilder documentBuilder) throws IOException {
-		Paragraph colorParagraph = documentBuilder.createParagraph("Colors: ");
-		addStyledText(documentBuilder, colorParagraph, "blue", BLUE);
-		addStyledText(documentBuilder, colorParagraph, "cyan", CYAN);
-		addStyledText(documentBuilder, colorParagraph, "dark gray", DARK_GRAY);
-		addStyledText(documentBuilder, colorParagraph, "gray", GRAY);
-		addStyledText(documentBuilder, colorParagraph, "green", GREEN);
-		addStyledText(documentBuilder, colorParagraph, "light gray", LIGHT_GRAY);
-		addStyledText(documentBuilder, colorParagraph, "magenta", MAGENTA);
-		addStyledText(documentBuilder, colorParagraph, "orange", ORANGE);
-		addStyledText(documentBuilder, colorParagraph, "pink", PINK);
-		addStyledText(documentBuilder, colorParagraph, "red", RED);
-		addStyledText(documentBuilder, colorParagraph, "yellow", YELLOW);
-		documentBuilder.addParagraph(colorParagraph);
+	private void addColors(DocumentBuilder documentBuilder) {
+		Paragraph paragraph = documentBuilder.createParagraph("Colors: ");
+		addColouredText(documentBuilder, paragraph, "blue", BLUE);
+		addColouredText(documentBuilder, paragraph, "cyan", CYAN);
+		addColouredText(documentBuilder, paragraph, "dark gray", DARK_GRAY);
+		addColouredText(documentBuilder, paragraph, "gray", GRAY);
+		addColouredText(documentBuilder, paragraph, "green", GREEN);
+		addColouredText(documentBuilder, paragraph, "light gray", LIGHT_GRAY);
+		addColouredText(documentBuilder, paragraph, "magenta", MAGENTA);
+		addColouredText(documentBuilder, paragraph, "orange", ORANGE);
+		addColouredText(documentBuilder, paragraph, "pink", PINK);
+		addColouredText(documentBuilder, paragraph, "red", RED);
+		addColouredText(documentBuilder, paragraph, "yellow", YELLOW);
+		documentBuilder.addParagraph(paragraph);
 	}
 
-	private void addFonts(DocumentBuilder documentBuilder) throws IOException {
-		Paragraph colorParagraph = documentBuilder.createParagraph("Fonts: ");
-		addStyledText(documentBuilder, colorParagraph, COURIER);
-		addStyledText(documentBuilder, colorParagraph, HELVETICA);
-		addStyledText(documentBuilder, colorParagraph, SYMBOL);
-		addStyledText(documentBuilder, colorParagraph, TIMES_ROMAN);
-		addStyledText(documentBuilder, colorParagraph, ZAPFDINGBATS);
-		documentBuilder.addParagraph(colorParagraph);
+	private void addColouredText(DocumentBuilder documentBuilder, Paragraph paragraph, String label, Color color) {
+		paragraph.add(documentBuilder.createStyledText(label, TextStyle.builder().color(color).build())).add(", ");
 	}
 
-	private void addStyledText(DocumentBuilder documentBuilder, Paragraph paragraph, String label, Color color) throws IOException {
-		paragraph.add(documentBuilder.createStyledText(label, color, null, false, false, false));
-		paragraph.add(", ");
+	private void addBackgroundColors(DocumentBuilder documentBuilder) {
+		Paragraph paragraph = documentBuilder.createParagraph("Background colors: ");
+		addBackgroundColouredText(documentBuilder, paragraph, "Merkur", WHITE, BLUE);
+		addBackgroundColouredText(documentBuilder, paragraph, "Venus", DARK_GRAY, ORANGE);
+		addBackgroundColouredText(documentBuilder, paragraph, "Earth", MAGENTA, YELLOW);
+		documentBuilder.addParagraph(paragraph);
 	}
 
-	private void addStyledText(DocumentBuilder documentBuilder, Paragraph paragraph, String fontFamily) throws IOException {
-		paragraph.add(documentBuilder.createStyledText(fontFamily, null, fontFamily, false, false, false));
-		paragraph.add(", ");
+	private void addBackgroundColouredText(DocumentBuilder documentBuilder, Paragraph paragraph, String label, Color color, Color backgroundColor) {
+		paragraph.add(documentBuilder.createStyledText(label, TextStyle.builder().color(color).backgroundColor(backgroundColor).build())).add(", ");
+	}
+
+	private void addFonts(DocumentBuilder documentBuilder) {
+		Paragraph paragraph = documentBuilder.createParagraph("Standard fonts: ");
+		addTextWithFont(documentBuilder, paragraph, COURIER);
+		addTextWithFont(documentBuilder, paragraph, HELVETICA);
+		addTextWithFont(documentBuilder, paragraph, SYMBOL);
+		addTextWithFont(documentBuilder, paragraph, TIMES_ROMAN);
+		addTextWithFont(documentBuilder, paragraph, ZAPFDINGBATS);
+		documentBuilder.addParagraph(paragraph);
+	}
+
+	private void addTextWithFont(DocumentBuilder documentBuilder, Paragraph paragraph, String fontFamily) {
+		paragraph.add(documentBuilder.createStyledText(fontFamily, TextStyle.builder().fontFamily(fontFamily).build())).add(", ");
+	}
+
+	private void addStyles(DocumentBuilder documentBuilder) {
+		Paragraph paragraph = documentBuilder.createParagraph("Styles: ");
+		paragraph.add(documentBuilder.createStyledText("Bold", TextStyle.builder().bold(true).build())).add(", ");
+		paragraph.add(documentBuilder.createStyledText("Italic", TextStyle.builder().italic(true).build())).add(", ");
+		paragraph.add(documentBuilder.createStyledText("Underline", TextStyle.builder().underline(true).build())).add(", ");
+		paragraph.add(documentBuilder.createStyledText("Line through", TextStyle.builder().lineThrough(true).build())).add(", ");
+		documentBuilder.addParagraph(paragraph);
 	}
 
 }
