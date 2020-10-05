@@ -4,6 +4,9 @@ import java.io.File;
 
 import org.junit.jupiter.api.BeforeAll;
 
+import com.thedeanda.lorem.Lorem;
+import com.thedeanda.lorem.LoremIpsum;
+
 abstract class AbstractTest {
 
 	protected static final String RESULT_PATH = "target";
@@ -11,6 +14,8 @@ abstract class AbstractTest {
 	public static final String GENERATED_PDF = RESULT_PATH + "/hello.pdf";
 	public static final String GENERATED_SECURED_PDF = RESULT_PATH + "/hello-secured.pdf";
 	
+	protected static Lorem lorem = LoremIpsum.getInstance();
+
 	@BeforeAll
 	public static void checkOrCreatePath() {
 		File f = new File(RESULT_PATH);

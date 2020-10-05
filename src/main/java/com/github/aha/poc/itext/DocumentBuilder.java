@@ -97,6 +97,10 @@ public class DocumentBuilder {
 		document.add(createParagraph(text));
 	}
 
+	public void addParagraph(Paragraph paragraph) {
+		document.add(paragraph);
+	}
+
 	public void addBarcode39(String code) {
 		document.add(createBarcode39Image(code));
 	}
@@ -185,7 +189,7 @@ public class DocumentBuilder {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}
 
-	Paragraph createParagraph(String text) {
+	public Paragraph createParagraph(String text) {
 		return new Paragraph(text);
 	}
 

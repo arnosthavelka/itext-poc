@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfReader;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
 // https://stackoverflow.com/questions/47609005/adding-meta-data-with-itext-7
 
@@ -19,8 +17,6 @@ import com.thedeanda.lorem.LoremIpsum;
 class MetadataTests extends AbstractTest {
 
 	private static final String VERSION_PROPERTY = "version";
-
-	private static Lorem lorem = LoremIpsum.getInstance();
 
 	@Test
 	void addTitle() throws Exception {
