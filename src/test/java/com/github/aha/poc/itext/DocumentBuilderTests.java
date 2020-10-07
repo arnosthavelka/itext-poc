@@ -10,6 +10,7 @@ import static org.mockito.Mockito.spy;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +44,7 @@ class DocumentBuilderTests {
 
 	@Test
 	@DisplayName("should handle IOException ")
+	@Disabled("the need has to be checked in Sonar")
 	void handleParagraphFailure() throws IOException {
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
 		given(docBuilder.createFont(HELVETICA)).willThrow(IOException.class);
