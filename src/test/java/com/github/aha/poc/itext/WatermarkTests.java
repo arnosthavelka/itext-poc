@@ -14,7 +14,7 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 class WatermarkTests extends AbstractTest {
 
 	@Test
-	void addTitle() throws Exception {
+	void watermark() throws Exception {
 		String targetPdf = RESULT_PATH + "/example-watermark.pdf";
 		var title = lorem.getWords(3);
 

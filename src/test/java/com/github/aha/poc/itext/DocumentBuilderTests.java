@@ -49,7 +49,8 @@ class DocumentBuilderTests {
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
 		given(docBuilder.createFont(HELVETICA)).willThrow(IOException.class);
 
-		assertThrows(ITextException.class, () -> docBuilder.createStyledParagraph("content", HELVETICA, 30));
+		assertThrows(ITextException.class,
+				() -> docBuilder.createStyledParagraph("content", ParagraphStyle.builder().fontName(HELVETICA).fontSize(30f).build()));
 	}
 
 }

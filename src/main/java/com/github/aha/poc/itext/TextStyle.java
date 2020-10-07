@@ -12,6 +12,7 @@ public class TextStyle {
 	private Color color;
 	private Color backgroundColor;
 	private String fontFamily;
+	private Float fontSize;
 	private boolean bold;
 	private boolean italic;
 	private boolean underline;

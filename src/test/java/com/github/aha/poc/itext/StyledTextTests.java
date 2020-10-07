@@ -43,6 +43,7 @@ class StyledTextTests extends AbstractTest {
 		addBackgroundColors(documentBuilder);
 		addFonts(documentBuilder);
 		addStyles(documentBuilder);
+		addSize(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
@@ -102,6 +103,14 @@ class StyledTextTests extends AbstractTest {
 		paragraph.add(documentBuilder.createStyledText("Italic", TextStyle.builder().italic(true).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("Underline", TextStyle.builder().underline(true).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("Line through", TextStyle.builder().lineThrough(true).build())).add(", ");
+		documentBuilder.addParagraph(paragraph);
+	}
+
+	private void addSize(DocumentBuilder documentBuilder) {
+		Paragraph paragraph = documentBuilder.createParagraph("Size: ");
+		paragraph.add(documentBuilder.createStyledText("10", TextStyle.builder().fontSize(10f).build())).add(", ");
+		paragraph.add(documentBuilder.createStyledText("30", TextStyle.builder().fontSize(30f).build())).add(", ");
+		paragraph.add(documentBuilder.createStyledText("50", TextStyle.builder().fontSize(50f).build())).add(", ");
 		documentBuilder.addParagraph(paragraph);
 	}
 

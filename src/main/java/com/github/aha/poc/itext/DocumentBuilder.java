@@ -141,8 +141,8 @@ public class DocumentBuilder {
 	}
 
 	public void addWatermark(String watermark) {
-		int fontSize = 100;
-		Paragraph paragraph = createStyledParagraph(watermark, HELVETICA, fontSize);
+		float fontSize = 100;
+		Paragraph paragraph = createStyledParagraph(watermark, ParagraphStyle.builder().fontName(HELVETICA).fontSize(fontSize).build());
 
 		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
@@ -157,10 +157,15 @@ public class DocumentBuilder {
 		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
-	Paragraph createStyledParagraph(String content, String fontName, int fontSize) {
-		return new Paragraph(content)
-				.setFont(createFont(fontName))
-				.setFontSize(fontSize);
+	Paragraph createStyledParagraph(String content, ParagraphStyle paragraphStyle) {
+		Paragraph paragraph = new Paragraph(content);
+		if (nonNull(paragraphStyle.getFontName())) {
+			paragraph.setFont(createFont(paragraphStyle.getFontName()));
+		}
+		if (nonNull(paragraphStyle.getFontSize())) {
+			paragraph.setFontSize(paragraphStyle.getFontSize());
+		}
+		return paragraph;
 	}
 
 	public Text createStyledText(String label, TextStyle textStyle) {
@@ -173,6 +178,9 @@ public class DocumentBuilder {
 		}
 		if (nonNull(textStyle.getFontFamily())) {
 				text.setFont(createFont(textStyle.getFontFamily()));
+		}
+		if (nonNull(textStyle.getFontSize())) {
+			text.setFontSize(textStyle.getFontSize());
 		}
 		if (textStyle.isBold()) {
 			text.setBold();
@@ -197,7 +205,7 @@ public class DocumentBuilder {
 		}
 	}
 
-	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
+	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
 		PdfDocument pdfDoc = document.getPdfDocument();
 		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
 		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
@@ -207,7 +215,7 @@ public class DocumentBuilder {
 		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
-		int xOffset = fontSize / 2;
+		float xOffset = fontSize / 2;
 		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
 		over.restoreState();
 	}
