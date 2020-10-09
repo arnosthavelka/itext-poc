@@ -44,10 +44,11 @@ class StyledTextTests extends AbstractTest {
 		addFonts(documentBuilder);
 		addStyles(documentBuilder);
 		addSize(documentBuilder);
+		addRotation(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
-			assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy())).startsWith(title);
+			assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy())).isNotEmpty();
 		}
 	}
 
@@ -112,6 +113,24 @@ class StyledTextTests extends AbstractTest {
 		paragraph.add(documentBuilder.createStyledText("30", TextStyle.builder().fontSize(30f).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("50", TextStyle.builder().fontSize(50f).build())).add(", ");
 		documentBuilder.addParagraph(paragraph);
+	}
+
+	private void addRotation(DocumentBuilder documentBuilder) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Text rotation: "));
+		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
+		addRotatedParagrapgh(documentBuilder, 0f);
+		addRotatedParagrapgh(documentBuilder, 0.785f); // 45
+		addRotatedParagrapgh(documentBuilder, 1.571f); // 90
+		addRotatedParagrapgh(documentBuilder, 2.356f); // 135
+		addRotatedParagrapgh(documentBuilder, 3.142f); // 180
+		addRotatedParagrapgh(documentBuilder, 3.927f); // 225
+		addRotatedParagrapgh(documentBuilder, 4.712f); // 270
+		addRotatedParagrapgh(documentBuilder, 5.498f); // 315
+	}
+
+	private void addRotatedParagrapgh(DocumentBuilder documentBuilder, Float rotation) {
+		documentBuilder
+				.addParagraph(documentBuilder.createStyledParagraph(rotation + " degree", ParagraphStyle.builder().rotation(rotation).build()));
 	}
 
 }

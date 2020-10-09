@@ -9,6 +9,6 @@ public class ParagraphStyle {
 
 	private String fontName;
 	private Float fontSize;
-	private Float fontRotation;
+	private Float rotation;
 
 }

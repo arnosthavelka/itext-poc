@@ -165,6 +165,9 @@ public class DocumentBuilder {
 		if (nonNull(paragraphStyle.getFontSize())) {
 			paragraph.setFontSize(paragraphStyle.getFontSize());
 		}
+		if (nonNull(paragraphStyle.getRotation())) {
+			paragraph.setRotationAngle(paragraphStyle.getRotation());
+		}
 		return paragraph;
 	}
 
