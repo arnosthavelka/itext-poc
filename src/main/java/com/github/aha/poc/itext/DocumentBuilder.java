@@ -5,6 +5,7 @@ import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
+import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
@@ -165,7 +166,15 @@ public class DocumentBuilder {
 		if (nonNull(paragraphStyle.getFontSize())) {
 			paragraph.setFontSize(paragraphStyle.getFontSize());
 		}
+		if (nonNull(paragraphStyle.getRotation())) {
+			paragraph.setRotationAngle(calculateRadiusFromDegree(paragraphStyle.getRotation()));
+		}
 		return paragraph;
+	}
+
+	private double calculateRadiusFromDegree(Float rotation) {
+		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
+		return PI / 180 * rotation;
 	}
 
 	public Text createStyledText(String label, TextStyle textStyle) {

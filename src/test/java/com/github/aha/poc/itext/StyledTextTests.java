@@ -44,10 +44,11 @@ class StyledTextTests extends AbstractTest {
 		addFonts(documentBuilder);
 		addStyles(documentBuilder);
 		addSize(documentBuilder);
+		addRotation(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
-			assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy())).startsWith(title);
+			assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy())).isNotEmpty();
 		}
 	}
 
@@ -112,6 +113,19 @@ class StyledTextTests extends AbstractTest {
 		paragraph.add(documentBuilder.createStyledText("30", TextStyle.builder().fontSize(30f).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("50", TextStyle.builder().fontSize(50f).build())).add(", ");
 		documentBuilder.addParagraph(paragraph);
+	}
+
+	private void addRotation(DocumentBuilder documentBuilder) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Text rotation: "));
+		for (float i = 45; i < 180;) {
+			addRotatedParagrapgh(documentBuilder, i);
+			i += 45;
+		}
+	}
+
+	private void addRotatedParagrapgh(DocumentBuilder documentBuilder, Float rotation) {
+		documentBuilder
+				.addParagraph(documentBuilder.createStyledParagraph(rotation + " degree", ParagraphStyle.builder().rotation(rotation).build()));
 	}
 
 }
