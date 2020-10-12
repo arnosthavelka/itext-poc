@@ -27,6 +27,12 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.DashedBorder;
+import com.itextpdf.layout.borders.DottedBorder;
+import com.itextpdf.layout.borders.DoubleBorder;
+import com.itextpdf.layout.borders.RidgeBorder;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
 
 @DisplayName("Define text with differet styles")
@@ -45,6 +51,7 @@ class StyledTextTests extends AbstractTest {
 		addStyles(documentBuilder);
 		addSize(documentBuilder);
 		addRotation(documentBuilder);
+		addBorder(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
@@ -128,4 +135,17 @@ class StyledTextTests extends AbstractTest {
 				.addParagraph(documentBuilder.createStyledParagraph(rotation + " degree", ParagraphStyle.builder().rotation(rotation).build()));
 	}
 
+	private void addBorder(DocumentBuilder documentBuilder) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Border: "));
+		addBorderedParagrapgh(documentBuilder, "Solid border", new SolidBorder(2f));
+		addBorderedParagrapgh(documentBuilder, "3D border (Ridge)", new RidgeBorder(2f));
+		addBorderedParagrapgh(documentBuilder, "Red dashed border", new DashedBorder(RED, 2f));
+		addBorderedParagrapgh(documentBuilder, "Blue dotted border with 50% opacity", new DottedBorder(BLUE, 2f, 0.5f));
+		addBorderedParagrapgh(documentBuilder, "Solid double border", new DoubleBorder(2f));
+	}
+
+	private void addBorderedParagrapgh(DocumentBuilder documentBuilder, String label, Border border) {
+		documentBuilder.addParagraph(documentBuilder.createStyledParagraph(label, ParagraphStyle.builder().border(border).build()));
+	}
 }
+
