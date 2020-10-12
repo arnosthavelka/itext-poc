@@ -169,6 +169,9 @@ public class DocumentBuilder {
 		if (nonNull(paragraphStyle.getRotation())) {
 			paragraph.setRotationAngle(calculateRadiusFromDegree(paragraphStyle.getRotation()));
 		}
+		if (nonNull(paragraphStyle.getBorder())) {
+			paragraph.setBorder(paragraphStyle.getBorder());
+		}
 		return paragraph;
 	}
 
