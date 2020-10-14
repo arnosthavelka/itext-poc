@@ -9,16 +9,12 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
 @DisplayName("verify PDF watermark feature")
 class WatermarkTests extends AbstractTest {
 
-	private static Lorem lorem = LoremIpsum.getInstance();
-
 	@Test
-	void addTitle() throws Exception {
+	void watermark() throws Exception {
 		String targetPdf = RESULT_PATH + "/example-watermark.pdf";
 		var title = lorem.getWords(3);
 

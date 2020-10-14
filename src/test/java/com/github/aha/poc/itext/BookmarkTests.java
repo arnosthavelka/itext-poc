@@ -14,16 +14,12 @@ import com.itextpdf.kernel.pdf.PdfOutline;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
 import lombok.extern.slf4j.Slf4j;
 
 @DisplayName("verify PDF bookmark feature")
 @Slf4j
 class BookmarkTests extends AbstractTest {
-
-	private static Lorem lorem = LoremIpsum.getInstance();
 
 	@Test
 	void addTitle() throws Exception {
