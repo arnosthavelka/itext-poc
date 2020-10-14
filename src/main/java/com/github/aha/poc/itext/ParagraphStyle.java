@@ -13,5 +13,7 @@ public class ParagraphStyle {
 	private Float fontSize;
 	private Float rotation;
 	private Border border;
+	private Float margin;
+	private Float padding;
 
 }

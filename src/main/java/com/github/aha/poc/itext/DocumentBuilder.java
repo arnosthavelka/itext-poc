@@ -172,6 +172,12 @@ public class DocumentBuilder {
 		if (nonNull(paragraphStyle.getBorder())) {
 			paragraph.setBorder(paragraphStyle.getBorder());
 		}
+		if (nonNull(paragraphStyle.getMargin())) {
+			paragraph.setMargin(paragraphStyle.getMargin());
+		}
+		if (nonNull(paragraphStyle.getPadding())) {
+			paragraph.setPadding(paragraphStyle.getPadding());
+		}
 		return paragraph;
 	}
 

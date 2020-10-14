@@ -40,7 +40,7 @@ class StyledTextTests extends AbstractTest {
 
 	@Test
 	void styledText() throws Exception {
-		String targetPdf = RESULT_PATH + "/example-style.pdf";
+		String targetPdf = RESULT_PATH + "/example-style-text.pdf";
 		var title = lorem.getWords(3);
 
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
@@ -50,8 +50,6 @@ class StyledTextTests extends AbstractTest {
 		addFonts(documentBuilder);
 		addStyles(documentBuilder);
 		addSize(documentBuilder);
-		addRotation(documentBuilder);
-		addBorder(documentBuilder);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
@@ -59,6 +57,23 @@ class StyledTextTests extends AbstractTest {
 		}
 	}
 
+	@Test
+	void styledParagraph() throws Exception {
+		String targetPdf = RESULT_PATH + "/example-style-paragraph.pdf";
+		var title = lorem.getWords(3);
+
+		DocumentBuilder documentBuilder = preparePdf(targetPdf);
+		documentBuilder.addTitle(title);
+		addRotation(documentBuilder);
+		addBorder(documentBuilder);
+		addMargin(documentBuilder);
+		addPadding(documentBuilder);
+		documentBuilder.generateDocument();
+
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+			assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy())).isNotEmpty();
+		}
+	}
 	private void addColors(DocumentBuilder documentBuilder) {
 		Paragraph paragraph = documentBuilder.createParagraph("Colors: ");
 		addColouredText(documentBuilder, paragraph, "blue", BLUE);
@@ -115,7 +130,7 @@ class StyledTextTests extends AbstractTest {
 	}
 
 	private void addSize(DocumentBuilder documentBuilder) {
-		Paragraph paragraph = documentBuilder.createParagraph("Size: ");
+		Paragraph paragraph = documentBuilder.createParagraph("Sizes: ");
 		paragraph.add(documentBuilder.createStyledText("10", TextStyle.builder().fontSize(10f).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("30", TextStyle.builder().fontSize(30f).build())).add(", ");
 		paragraph.add(documentBuilder.createStyledText("50", TextStyle.builder().fontSize(50f).build())).add(", ");
@@ -123,20 +138,19 @@ class StyledTextTests extends AbstractTest {
 	}
 
 	private void addRotation(DocumentBuilder documentBuilder) {
-		documentBuilder.addParagraph(documentBuilder.createParagraph("Text rotation: "));
-		for (float i = 45; i < 180;) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Text rotations: "));
+		for (float i = 45; i < 180; i = i + 45) {
 			addRotatedParagrapgh(documentBuilder, i);
-			i += 45;
 		}
 	}
 
 	private void addRotatedParagrapgh(DocumentBuilder documentBuilder, Float rotation) {
-		documentBuilder
-				.addParagraph(documentBuilder.createStyledParagraph(rotation + " degree", ParagraphStyle.builder().rotation(rotation).build()));
+		var paragraphStyle = ParagraphStyle.builder().rotation(rotation).build();
+		documentBuilder.addParagraph(documentBuilder.createStyledParagraph(rotation + " degree", paragraphStyle));
 	}
 
 	private void addBorder(DocumentBuilder documentBuilder) {
-		documentBuilder.addParagraph(documentBuilder.createParagraph("Border: "));
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Borders: "));
 		addBorderedParagrapgh(documentBuilder, "Solid border", new SolidBorder(2f));
 		addBorderedParagrapgh(documentBuilder, "3D border (Ridge)", new RidgeBorder(2f));
 		addBorderedParagrapgh(documentBuilder, "Red dashed border", new DashedBorder(RED, 2f));
@@ -147,5 +161,24 @@ class StyledTextTests extends AbstractTest {
 	private void addBorderedParagrapgh(DocumentBuilder documentBuilder, String label, Border border) {
 		documentBuilder.addParagraph(documentBuilder.createStyledParagraph(label, ParagraphStyle.builder().border(border).build()));
 	}
+
+	private void addMargin(DocumentBuilder documentBuilder) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Margins: "));
+		for (float offset = 0; offset < 10; offset = offset + 3) {
+			var paragraphStyle = ParagraphStyle.builder().margin(offset).border(new SolidBorder(1f)).build();
+			documentBuilder.addParagraph(documentBuilder.createStyledParagraph(offset + " px", paragraphStyle));
+		}
+	}
+
+	private void addPadding(DocumentBuilder documentBuilder) {
+		documentBuilder.addParagraph(documentBuilder.createParagraph("Paddings: "));
+		for (float offset = 0; offset < 10; offset = offset + 3) {
+			var paragraphStyle = ParagraphStyle.builder().padding(offset).border(new SolidBorder(1f)).build();
+			documentBuilder.addParagraph(documentBuilder.createStyledParagraph(offset + " px", paragraphStyle));
+		}
+	}
+
 }
+
+
 
