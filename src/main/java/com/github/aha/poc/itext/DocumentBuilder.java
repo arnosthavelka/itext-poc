@@ -5,6 +5,7 @@ import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
+import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 
@@ -97,6 +99,10 @@ public class DocumentBuilder {
 		document.add(createParagraph(text));
 	}
 
+	public void addParagraph(Paragraph paragraph) {
+		document.add(paragraph);
+	}
+
 	public void addBarcode39(String code) {
 		document.add(createBarcode39Image(code));
 	}
@@ -136,8 +142,8 @@ public class DocumentBuilder {
 	}
 
 	public void addWatermark(String watermark) {
-		int fontSize = 100;
-		Paragraph paragraph = createStyledParagraph(watermark, HELVETICA, fontSize);
+		float fontSize = 100;
+		Paragraph paragraph = createStyledParagraph(watermark, ParagraphStyle.builder().fontName(HELVETICA).fontSize(fontSize).build());
 
 		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
@@ -152,21 +158,72 @@ public class DocumentBuilder {
 		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
-	Paragraph createStyledParagraph(String content, String fontType, int fontSize) {
+	Paragraph createStyledParagraph(String content, ParagraphStyle paragraphStyle) {
+		Paragraph paragraph = new Paragraph(content);
+		if (nonNull(paragraphStyle.getFontName())) {
+			paragraph.setFont(createFont(paragraphStyle.getFontName()));
+		}
+		if (nonNull(paragraphStyle.getFontSize())) {
+			paragraph.setFontSize(paragraphStyle.getFontSize());
+		}
+		if (nonNull(paragraphStyle.getRotation())) {
+			paragraph.setRotationAngle(calculateRadiusFromDegree(paragraphStyle.getRotation()));
+		}
+		if (nonNull(paragraphStyle.getBorder())) {
+			paragraph.setBorder(paragraphStyle.getBorder());
+		}
+		if (nonNull(paragraphStyle.getMargin())) {
+			paragraph.setMargin(paragraphStyle.getMargin());
+		}
+		if (nonNull(paragraphStyle.getPadding())) {
+			paragraph.setPadding(paragraphStyle.getPadding());
+		}
+		return paragraph;
+	}
+
+	private double calculateRadiusFromDegree(Float rotation) {
+		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
+		return PI / 180 * rotation;
+	}
+
+	public Text createStyledText(String label, TextStyle textStyle) {
+		Text text = new Text(label);
+		if (nonNull(textStyle.getColor())) {
+			text.setFontColor(textStyle.getColor());
+		}
+		if (nonNull(textStyle.getBackgroundColor())) {
+			text.setBackgroundColor(textStyle.getBackgroundColor());
+		}
+		if (nonNull(textStyle.getFontFamily())) {
+				text.setFont(createFont(textStyle.getFontFamily()));
+		}
+		if (nonNull(textStyle.getFontSize())) {
+			text.setFontSize(textStyle.getFontSize());
+		}
+		if (textStyle.isBold()) {
+			text.setBold();
+		}
+		if (textStyle.isItalic()) {
+			text.setItalic();
+		}
+		if (textStyle.isUnderline()) {
+			text.setUnderline();
+		}
+		if (textStyle.isLineThrough()) {
+			text.setLineThrough();
+		}
+		return text;
+	}
+
+	PdfFont createFont(String fontType) {
 		try {
-			return new Paragraph(content)
-					.setFont(createFont(fontType))
-					.setFontSize(fontSize);
+			return PdfFontFactory.createFont(fontType);
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
 	}
 
-	PdfFont createFont(String fontType) throws IOException {
-		return PdfFontFactory.createFont(fontType);
-	}
-
-	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, int fontSize) {
+	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
 		PdfDocument pdfDoc = document.getPdfDocument();
 		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
 		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
@@ -176,7 +233,7 @@ public class DocumentBuilder {
 		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
-		int xOffset = fontSize / 2;
+		float xOffset = fontSize / 2;
 		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
 		over.restoreState();
 	}
@@ -185,7 +242,7 @@ public class DocumentBuilder {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}
 
-	Paragraph createParagraph(String text) {
+	public Paragraph createParagraph(String text) {
 		return new Paragraph(text);
 	}
 

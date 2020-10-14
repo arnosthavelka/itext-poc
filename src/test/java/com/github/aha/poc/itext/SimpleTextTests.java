@@ -11,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfObject;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.EventType;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfDocumentContentParser;
@@ -20,8 +19,6 @@ import com.itextpdf.kernel.pdf.canvas.parser.data.IEventData;
 import com.itextpdf.kernel.pdf.canvas.parser.data.TextRenderInfo;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.IEventListener;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,33 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @DisplayName("Simple checking PDF by the text content")
 @Slf4j
 class SimpleTextTests extends AbstractTest {
-
-	private static Lorem lorem = LoremIpsum.getInstance();
-
-	@Test
-	void testBuilder() throws Exception {
-		var title = lorem.getWords(3);
-		var content = lorem.getParagraphs(2, 4);
-
-		generatePDF(title, content);
-
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(GENERATED_PDF))) {
-			for (int i = 1; i <= pdfDocument.getNumberOfPdfObjects(); i++) {
-				PdfObject pdfObject = pdfDocument.getPdfObject(i);
-				if (pdfObject == null) { // || !pdfObject.isStream()
-					continue;
-				}
-				log.info("object: index={}, type={}", i, pdfObject.getType());
-//				byte[] bytes = ((PdfStream) pdfObject).getBytes(false); // new String(bytes, "UTF-8")
-				log.info("value={}, ref={}", pdfObject.toString(), pdfObject.getIndirectReference().getRefersTo().toString());
-			}
-//			PdfArray idArray = pdfDocument.getTrailer().getAsArray(PdfName.ID);
-//			String text = PdfTextExtractor.getTextFromPage(pdfDocument.getPage(1));
-			log.info("\n\ntest value={}", pdfDocument.getFirstPage().getPdfObject());
-			String text = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
-			assertThat(text).startsWith(title);
-		}
-	}
 
 	@Test
 	@DisplayName("Load page content as single (whole) text")
