@@ -1,9 +1,12 @@
 package com.github.aha.poc.itext;
 
+import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
+
 import java.io.File;
 
 import org.junit.jupiter.api.BeforeAll;
 
+import com.itextpdf.kernel.pdf.PdfVersion;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
@@ -35,13 +38,13 @@ abstract class AbstractTest {
 
 	protected DocumentBuilder preparePdf(String targetFile) {
 		DocumentBuilder documentBuilder = new DocumentBuilder(targetFile);
-		documentBuilder.init();
+		documentBuilder.init(PdfProperties.builder().pdfVersion(PDF_2_0).build());
 		return documentBuilder;
 	}
 
 	protected void generateSecuredPDF(String userPassword, String title, String content) {
 		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_SECURED_PDF);
-		documentBuilder.initWithPassword(userPassword.getBytes(), null);
+		documentBuilder.init(PdfProperties.builder().userPassword(userPassword.getBytes()).build());
 		addPdfContent(title, content, documentBuilder);
 	}
 

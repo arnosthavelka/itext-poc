@@ -10,7 +10,6 @@ import static org.mockito.Mockito.spy;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -44,13 +43,11 @@ class DocumentBuilderTests {
 
 	@Test
 	@DisplayName("should handle IOException ")
-	@Disabled("the need has to be checked in Sonar")
 	void handleParagraphFailure() throws IOException {
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
 		given(docBuilder.createPdfFont(HELVETICA)).willThrow(IOException.class);
 
-		ParagraphStyle styledText = ParagraphStyle.builder().fontName(HELVETICA).fontSize(30f).build();
-		assertThrows(ITextException.class, () -> docBuilder.createStyledParagraph("content", styledText));
+		assertThrows(ITextException.class, () -> docBuilder.createFont(HELVETICA));
 	}
 
 }

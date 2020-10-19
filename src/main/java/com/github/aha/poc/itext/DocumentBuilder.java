@@ -3,7 +3,6 @@ package com.github.aha.poc.itext;
 import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
-import static com.itextpdf.kernel.pdf.PdfVersion.PDF_2_0;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
 import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
@@ -37,7 +36,6 @@ import com.itextpdf.layout.property.VerticalAlignment;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,20 +45,23 @@ public class DocumentBuilder {
 	@NonNull
 	String targetFile;
 
-	@Setter
-	PdfVersion pdfVersion = PDF_2_0;
-
 	Document document;
 
-	public void init() {
-		document = new Document(createDocument(targetFile, buildWriterProperties(pdfVersion)));
+	public void init(PdfProperties pdfProperties) {
+		document = new Document(createDocument(targetFile, buildWriterProperties(pdfProperties)));
 	}
 
-	public void initWithPassword(byte[] userPassword, byte[] ownerPassword) {
-		WriterProperties writerProperties = buildWriterProperties(pdfVersion);
-		writerProperties.setStandardEncryption(userPassword, ownerPassword, ALLOW_PRINTING /* | EncryptionConstants.ALLOW_COPY */,
-				ENCRYPTION_AES_256);
-		document = new Document(createDocument(targetFile, writerProperties));
+	WriterProperties buildWriterProperties(PdfProperties pdfProperties) {
+		WriterProperties wp = new WriterProperties();
+		wp.addXmpMetadata();
+		if (nonNull(pdfProperties.getPdfVersion())) {
+			wp.setPdfVersion(pdfProperties.getPdfVersion());
+		}
+		if (nonNull(pdfProperties.getUserPassword()) || nonNull(pdfProperties.getOwnerPassword())) {
+			wp.setStandardEncryption(pdfProperties.getUserPassword(), pdfProperties.getOwnerPassword(),
+					ALLOW_PRINTING /* | EncryptionConstants.ALLOW_COPY */, ENCRYPTION_AES_256);
+		}
+		return wp;
 	}
 
 	public void generateDocument() {
@@ -215,9 +216,9 @@ public class DocumentBuilder {
 		return text;
 	}
 
-	private PdfFont createFont(String fontType) {
+	PdfFont createFont(String fontType) {
 		try {
-			return PdfFontFactory.createFont(fontType);
+			return createPdfFont(fontType);
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
