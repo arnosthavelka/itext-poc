@@ -23,24 +23,44 @@ import lombok.extern.slf4j.Slf4j;
 
 @DisplayName("iText security features")
 @Slf4j
-class EncryptionTests extends AbstractTest {
+class SecurityTests extends AbstractTest {
 
-	public static final String RESULT = RESULT_PATH + "/encryption.pdf";
+	public static final String RESULT = RESULT_PATH + "/example-encryption.pdf";
+	static final String GENERATED_SECURED_PDF = RESULT_PATH + "/example-secured.pdf";
 
 	@Test
 	@DisplayName("add password and restrict (remove) copy permission in newly generated PDF")
 	void createPdfWithSecurity() throws Exception {
 		var title = "PDF title";
 		var content = "Some secured content";
+		var userPassword = "aha";
 
-		generateSecuredPDF("aha", title, content);
+		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_SECURED_PDF);
+		documentBuilder.init(PdfProperties.builder().userPassword(userPassword.getBytes()).build());
+		addPdfContent(title, content, documentBuilder);
 
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(GENERATED_SECURED_PDF, buildReaderPropertiesWithPassword("aha")))) {
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(GENERATED_SECURED_PDF, buildReaderPropertiesWithPassword(userPassword)))) {
 			String pdfContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
 			log.debug("PDF content:\n{}", pdfContent);
 			assertThat(pdfContent).startsWith(title);
 		}
+	}
 
+	@Test
+	void createPdfWithSecurity2() throws Exception {
+		var title = "PDF title";
+		var content = "Some secured content";
+		var ownerPassword = "admin";
+
+		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_SECURED_PDF);
+		documentBuilder.init(PdfProperties.builder().ownerPassword(ownerPassword.getBytes()).build());
+		addPdfContent(title, content, documentBuilder);
+
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(GENERATED_SECURED_PDF))) {
+			String pdfContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
+			log.debug("PDF content:\n{}", pdfContent);
+			assertThat(pdfContent).startsWith(title);
+		}
 	}
 
 	@Test

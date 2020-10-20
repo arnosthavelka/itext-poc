@@ -81,11 +81,11 @@ public class DocumentBuilder {
 		return new PdfWriter(targetFilename, writerProperties); // NOSONAR
 	}
 
-	public void addTitle(String text) {
-		Paragraph titleElement = createParagraph(text);
+	public void addTitle(String title) {
+		Paragraph titleElement = createParagraph(title);
 		titleElement.setBold();
 		document.add(titleElement);
-		addMetadata(text, null, null, null);
+		addMetadata(title, null, null, null);
 	}
 
 	public void addParagraph(String text) {
