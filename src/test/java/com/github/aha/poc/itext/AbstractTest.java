@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.jupiter.api.BeforeAll;
 
-import com.itextpdf.kernel.pdf.PdfVersion;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
@@ -15,7 +14,6 @@ abstract class AbstractTest {
 	protected static final String RESULT_PATH = "target";
 
 	public static final String GENERATED_PDF = RESULT_PATH + "/hello.pdf";
-	public static final String GENERATED_SECURED_PDF = RESULT_PATH + "/hello-secured.pdf";
 	
 	protected static Lorem lorem = LoremIpsum.getInstance();
 
@@ -42,13 +40,7 @@ abstract class AbstractTest {
 		return documentBuilder;
 	}
 
-	protected void generateSecuredPDF(String userPassword, String title, String content) {
-		DocumentBuilder documentBuilder = new DocumentBuilder(GENERATED_SECURED_PDF);
-		documentBuilder.init(PdfProperties.builder().userPassword(userPassword.getBytes()).build());
-		addPdfContent(title, content, documentBuilder);
-	}
-
-	private void addPdfContent(String title, String content, DocumentBuilder documentBuilder) {
+	protected void addPdfContent(String title, String content, DocumentBuilder documentBuilder) {
 		documentBuilder.addTitle(title);
 		documentBuilder.addParagraph(content);
 		documentBuilder.generateDocument();
