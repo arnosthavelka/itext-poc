@@ -21,7 +21,6 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfOutline;
 import com.itextpdf.kernel.pdf.PdfPage;
-import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
@@ -80,13 +79,6 @@ public class DocumentBuilder {
 
 	PdfWriter createPdfWriter(String targetFilename, WriterProperties writerProperties) throws FileNotFoundException {
 		return new PdfWriter(targetFilename, writerProperties); // NOSONAR
-	}
-
-	WriterProperties buildWriterProperties(PdfVersion version) {
-		WriterProperties wp = new WriterProperties();
-		wp.addXmpMetadata();
-		wp.setPdfVersion(version);
-		return wp;
 	}
 
 	public void addTitle(String text) {
@@ -159,6 +151,10 @@ public class DocumentBuilder {
 		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
+	public Paragraph createParagraph(String text) {
+		return new Paragraph(text);
+	}
+
 	Paragraph createStyledParagraph(String content, ParagraphStyle paragraphStyle) {
 		Paragraph paragraph = new Paragraph(content);
 		if (nonNull(paragraphStyle.getFontName())) {
@@ -180,11 +176,6 @@ public class DocumentBuilder {
 			paragraph.setPadding(paragraphStyle.getPadding());
 		}
 		return paragraph;
-	}
-
-	private double calculateRadiusFromDegree(Float rotation) {
-		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
-		return PI / 180 * rotation;
 	}
 
 	public Text createStyledText(String label, TextStyle textStyle) {
@@ -216,6 +207,11 @@ public class DocumentBuilder {
 		return text;
 	}
 
+	private double calculateRadiusFromDegree(Float rotation) {
+		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
+		return PI / 180 * rotation;
+	}
+
 	PdfFont createFont(String fontType) {
 		try {
 			return createPdfFont(fontType);
@@ -245,10 +241,6 @@ public class DocumentBuilder {
 
 	private float getPageWidth() {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
-	}
-
-	public Paragraph createParagraph(String text) {
-		return new Paragraph(text);
 	}
 
 	Image createBarcode39Image(String code) {
