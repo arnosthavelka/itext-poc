@@ -4,6 +4,8 @@ import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
+import static com.itextpdf.layout.property.TextAlignment.CENTER;
+import static com.itextpdf.layout.property.VerticalAlignment.TOP;
 import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 
@@ -30,8 +32,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -235,7 +235,7 @@ public class DocumentBuilder {
 		over.saveState();
 		over.setExtGState(graphicState);
 		float xOffset = fontSize / 2;
-		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, TextAlignment.CENTER, VerticalAlignment.TOP, 45);
+		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, CENTER, TOP, 45);
 		over.restoreState();
 	}
 
