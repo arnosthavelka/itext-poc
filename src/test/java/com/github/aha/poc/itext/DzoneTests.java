@@ -26,18 +26,16 @@ class DzoneTests {
 	private static Lorem lorem = LoremIpsum.getInstance();
 
 	@Test
-	void generateSimpleContent() throws Exception {
+	void generateSimplePdf() throws Exception {
 		var content = lorem.getParagraphs(2, 4);
 
 		String simplePdf = "target/dzone-simple.pdf";
-		try {
-			WriterProperties wp = new WriterProperties();
-			wp.setPdfVersion(PdfVersion.PDF_2_0);
-			PdfWriter writer = new PdfWriter(simplePdf, wp);
-			PdfDocument pdfDocument = new PdfDocument(writer);
-			Document document = new Document(pdfDocument);
+		WriterProperties wp = new WriterProperties();
+		wp.setPdfVersion(PdfVersion.PDF_2_0);
+		try (PdfWriter writer = new PdfWriter(simplePdf, wp);
+				PdfDocument pdfDocument = new PdfDocument(writer);
+				Document document = new Document(pdfDocument);) {
 			document.add(new Paragraph(content));
-			document.close();
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
 			throw new ITextException(e.getMessage());
