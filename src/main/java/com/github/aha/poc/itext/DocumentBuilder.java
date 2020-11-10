@@ -212,16 +212,16 @@ public class DocumentBuilder {
 		return PI / 180 * rotation;
 	}
 
-	PdfFont createFont(String fontType) {
+	PdfFont createFont(String fontFamily) {
 		try {
-			return createPdfFont(fontType);
+			return createPdfFont(fontFamily);
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
 	}
 
-	PdfFont createPdfFont(String pdfFont) throws IOException {
-		return PdfFontFactory.createFont(pdfFont);
+	PdfFont createPdfFont(String fontFamily) throws IOException {
+		return PdfFontFactory.createFont(fontFamily);
 	}
 
 	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
