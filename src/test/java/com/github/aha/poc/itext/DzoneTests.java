@@ -2,6 +2,8 @@ package com.github.aha.poc.itext;
 
 import static com.itextpdf.io.font.constants.StandardFonts.COURIER;
 import static com.itextpdf.kernel.colors.ColorConstants.BLUE;
+import static com.itextpdf.kernel.colors.ColorConstants.RED;
+import static com.itextpdf.kernel.colors.ColorConstants.YELLOW;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,14 +61,22 @@ class DzoneTests {
 
 	@Test
 	void styledText() throws Exception {
-		var bigBlueCourierText = "big blue Courier";
+		var label1 = "big blue Courier font";
+		var label2 = "underlined bold default font with yellow background";
+		var label3 = "crossed italic";
 
 		String simplePdf = "target/dzone-styled-text.pdf";
 		try (PdfWriter writer = new PdfWriter(simplePdf);
 				PdfDocument pdfDocument = new PdfDocument(writer);
 				Document document = new Document(pdfDocument)) {
 
-			document.add(new Paragraph(createStyledText(bigBlueCourierText, BLUE, null, COURIER, 30f, false, false, false, false)));
+			Paragraph paragraph = new Paragraph();
+			paragraph.add(styledText(label1, BLUE, null, COURIER, 30f, false, false, false, false));
+			paragraph.add("\n");
+			paragraph.add(styledText(label2, RED, YELLOW, null, null, true, false, true, false));
+			paragraph.add("\n");
+			paragraph.add(styledText(label3, null, null, null, null, false, true, false, true));
+			document.add(paragraph);
 
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
@@ -75,11 +85,13 @@ class DzoneTests {
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(simplePdf))) {
 			String firstPageContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
-			assertThat(firstPageContent).startsWith(bigBlueCourierText);
+			assertThat(firstPageContent).startsWith(label1);
+			assertThat(firstPageContent).contains(label2);
+			assertThat(firstPageContent).contains(label3);
 		}
 	}
 
-	public Text createStyledText(String label, Color color,	Color backgroundColor, String fontFamily, Float fontSize, boolean isBold, boolean isItalic, boolean isUnderline, boolean isLineThrough) {
+	public Text styledText(String label, Color color,	Color backgroundColor, String fontFamily, Float fontSize, boolean isBold, boolean isItalic, boolean isUnderline, boolean isLineThrough) {
 		Text text = new Text(label);
 		if (nonNull(color)) {
 			text.setFontColor(color);
@@ -88,7 +100,7 @@ class DzoneTests {
 			text.setBackgroundColor(backgroundColor);
 		}
 		if (nonNull(fontFamily)) {
-				text.setFont(createFont(fontFamily));
+			text.setFont(createFont(fontFamily));
 		}
 		if (nonNull(fontSize)) {
 			text.setFontSize(fontSize);
