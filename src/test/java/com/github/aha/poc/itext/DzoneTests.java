@@ -2,8 +2,10 @@ package com.github.aha.poc.itext;
 
 import static com.itextpdf.io.font.constants.StandardFonts.COURIER;
 import static com.itextpdf.kernel.colors.ColorConstants.BLUE;
+import static com.itextpdf.kernel.colors.ColorConstants.GREEN;
 import static com.itextpdf.kernel.colors.ColorConstants.RED;
 import static com.itextpdf.kernel.colors.ColorConstants.YELLOW;
+import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +25,8 @@ import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.DashedBorder;
+import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.thedeanda.lorem.Lorem;
@@ -87,7 +91,7 @@ class DzoneTests {
 			String firstPageContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
 			assertThat(firstPageContent).startsWith(label1);
 			assertThat(firstPageContent).contains(label2);
-			assertThat(firstPageContent).contains(label3);
+			assertThat(firstPageContent).endsWith(label3);
 		}
 	}
 
@@ -126,6 +130,50 @@ class DzoneTests {
 		} catch (IOException e) {
 			throw new ITextException("Font creation failed", e);
 		}
+	}
+
+	@Test
+	void styledParagraph() throws Exception {
+		var label1 = "45° rotation";
+		var label2 = "green solid border";
+		var label3 = "6px margin & 3px padding & solid border";
+
+		String simplePdf = "target/dzone-styled-paragraph.pdf";
+		try (PdfWriter writer = new PdfWriter(simplePdf);
+				PdfDocument pdfDocument = new PdfDocument(writer);
+				Document document = new Document(pdfDocument)) {
+
+			Paragraph rotatedParagraph = new Paragraph(label1);
+			rotatedParagraph.setRotationAngle(calculateRadiusFromDegree(45f));
+			document.add(rotatedParagraph);
+
+			Paragraph borderedParagraph = new Paragraph(label2);
+			borderedParagraph.setBorder(new DashedBorder(GREEN, 2f));
+			document.add(borderedParagraph);
+
+			Paragraph offsetedParagraph = new Paragraph(label3);
+			offsetedParagraph.setMargin(6f);
+			offsetedParagraph.setPadding(3f);
+			offsetedParagraph.setBorder(new SolidBorder(1f));
+			document.add(offsetedParagraph);
+
+
+		} catch (FileNotFoundException e) {
+			log.error("Creating PDF failed", e);
+			throw new ITextException(e.getMessage());
+		}
+
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(simplePdf))) {
+			String firstPageContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
+//			assertThat(firstPageContent).contains(label1);
+			assertThat(firstPageContent).contains(label2);
+			assertThat(firstPageContent).contains(label3);
+		}
+	}
+
+	private double calculateRadiusFromDegree(Float rotation) {
+		// half rotation in Radians is Pi (3.14) -> full rotation is 2 Pi
+		return PI / 180 * rotation;
 	}
 
 }
