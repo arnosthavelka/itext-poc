@@ -15,7 +15,7 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 | **General**   |                       |              |                                          |
 |               | iText                 | 7.1.13       | PDF generation                           |
 |               | Lombok                | by SB        | Simplification of Java classes           |
-|               | Spring Boot           | 2.3.5        | Just for dependency management           |
+|               | Spring Boot           | 2.4.0        | Just for dependency management           |
 |               | Lorem                 | 2.1          | Library for LoremIpsum texts             |
 | **Testing**   |                       |              |                                          |
 |               | JUnit                 | by SB        | Unit testing with JUnit5                 |
