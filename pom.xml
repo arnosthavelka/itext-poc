@@ -26,7 +26,6 @@
 		<jacoco.version>0.8.6</jacoco.version>
 		<itext.version>7.1.13</itext.version>
 		<lorem.version>2.1</lorem.version>
-		<lombok.version>1.18.16</lombok.version> <!-- temporary downgrade to mitigate "Cannot invoke 'java.util.Map.get(Object)' because 'this.map" is null"  -->
 	</properties>
 
 	<dependencies>
