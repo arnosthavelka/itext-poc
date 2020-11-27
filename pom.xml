@@ -45,18 +45,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.thedeanda</groupId>
-			<artifactId>lorem</artifactId>
-			<version>${lorem.version}</version>
-		</dependency>
-
 	</dependencies>
 
 	<profiles>
