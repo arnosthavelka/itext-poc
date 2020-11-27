@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.font.PdfFont;
@@ -29,19 +31,18 @@ import com.itextpdf.layout.borders.DashedBorder;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
-import com.thedeanda.lorem.Lorem;
-import com.thedeanda.lorem.LoremIpsum;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 class DzoneTests {
 
-	private static Lorem lorem = LoremIpsum.getInstance();
+	final static Logger log = LoggerFactory.getLogger(DzoneTests.class);
 
 	@Test
 	void simpleText() throws Exception {
-		var content = lorem.getParagraphs(2, 4);
+		var loremIpsumContent = "Sapiensplendide noluisse aliquip altera natoque veniam principes.  Pulvinareruditi sanctus corrumpit hendrerit adhuc sapientem ridens "
+				+ "luptatum nihil enim justo aliquid nascetur causae consectetur a quem dolorum vestibulum.  Utroquesuscipit duo tristique tellus saperet "
+				+ "hendrerit maiestatis.  Suashendrerit accommodare vituperatoribus audire praesent facilisi inani efficiantur pro volutpat feugait inani "
+				+ "eripuit dicit nihil nostrum etiam odio inceptos.  Pulvinarnisi magna noluisse saperet equidem elementum tantas intellegebat mollis verterem "
+				+ "alia regione quidam.";
 
 		String simplePdf = "target/dzone-simple-text.pdf";
 		WriterProperties wp = new WriterProperties();
@@ -50,7 +51,7 @@ class DzoneTests {
 				PdfDocument pdfDocument = new PdfDocument(writer);
 				Document document = new Document(pdfDocument)) {
 
-			document.add(new Paragraph(content));
+			document.add(new Paragraph(loremIpsumContent));
 
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
@@ -59,7 +60,7 @@ class DzoneTests {
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(simplePdf))) {
 			String firstPageContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
-			assertThat(firstPageContent).startsWith(content.substring(0, 10));
+			assertThat(firstPageContent).startsWith(loremIpsumContent.substring(0, 10));
 		}
 	}
 
