@@ -38,7 +38,7 @@ class DzoneTests {
 
 	@Test
 	void simpleText() throws Exception {
-		var loremIpsumContent = "Sapiensplendide noluisse aliquip altera natoque veniam principes.  "
+		var textContent = "Sapiensplendide noluisse aliquip altera natoque veniam principes.  "
 				+ "Pulvinareruditi sanctus corrumpit hendrerit adhuc sapientem ridens luptatum nihil "
 				+ "enim justo aliquid nascetur causae consectetur a quem dolorum vestibulum.  "
 				+ "Utroquesuscipit duo tristique tellus saperet hendrerit maiestatis.  Suashendrerit "
@@ -54,7 +54,7 @@ class DzoneTests {
 				PdfDocument pdfDocument = new PdfDocument(writer);
 				Document document = new Document(pdfDocument)) {
 
-			document.add(new Paragraph(loremIpsumContent));
+			document.add(new Paragraph(textContent));
 
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
@@ -63,7 +63,7 @@ class DzoneTests {
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(simplePdf))) {
 			String firstPageContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
-			assertThat(firstPageContent).startsWith(loremIpsumContent.substring(0, 10));
+			assertThat(firstPageContent).startsWith(textContent.substring(0, 10));
 		}
 	}
 
