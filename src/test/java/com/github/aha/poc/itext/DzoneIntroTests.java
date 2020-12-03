@@ -32,9 +32,9 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 
-class DzoneTests {
+class DzoneIntroTests {
 
-	final static Logger log = LoggerFactory.getLogger(DzoneTests.class);
+	final static Logger log = LoggerFactory.getLogger(DzoneIntroTests.class);
 
 	@Test
 	void simpleText() throws Exception {
