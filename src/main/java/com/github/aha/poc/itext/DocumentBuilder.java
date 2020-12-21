@@ -14,7 +14,10 @@ import java.io.IOException;
 
 import com.itextpdf.barcodes.Barcode128;
 import com.itextpdf.barcodes.Barcode39;
+import com.itextpdf.barcodes.BarcodeDataMatrix;
 import com.itextpdf.barcodes.BarcodeEAN;
+import com.itextpdf.barcodes.BarcodeMSI;
+import com.itextpdf.barcodes.BarcodePostnet;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -108,8 +111,21 @@ public class DocumentBuilder {
 		document.add(createBarcodeEANImage(code));
 	}
 
+	public void addBarcodeMSI(String code) {
+		document.add(createBarcodeMSIImage(code));
+	}
+
+	public void addBarcodePostnet(String code) {
+		document.add(createBarcodePostnetImage(code));
+	}
+
 	public void addQrCode(String code) {
 		document.add(createQrCodeImage(code));
+		document.add(createParagraph(code));
+	}
+
+	public void addDataMatrix(String code) {
+		document.add(createDataMatrix(code));
 		document.add(createParagraph(code));
 	}
 
@@ -244,34 +260,54 @@ public class DocumentBuilder {
 	}
 
 	Image createBarcode39Image(String code) {
-		Barcode39 codeObject = new Barcode39(document.getPdfDocument());
+		var codeObject = new Barcode39(document.getPdfDocument());
 		codeObject.setCode(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
 		return createCodeImage(codeImage, false);
 	}
 
 	Image createBarcode128Image(String code) {
-		Barcode128 codeObject = new Barcode128(document.getPdfDocument());
+		var codeObject = new Barcode128(document.getPdfDocument());
 		codeObject.setCode(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
 		return createCodeImage(codeImage, false);
 	}
 
 	Image createBarcodeEANImage(String code) {
-		BarcodeEAN codeObject = new BarcodeEAN(document.getPdfDocument());
+		var codeObject = new BarcodeEAN(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcodeMSIImage(String code) {
+		var codeObject = new BarcodeMSI(document.getPdfDocument());
+		codeObject.setCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, false);
+	}
+
+	Image createBarcodePostnetImage(String code) {
+		var codeObject = new BarcodePostnet(document.getPdfDocument());
 		codeObject.setCode(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
 		return createCodeImage(codeImage, false);
 	}
 
 	Image createQrCodeImage(String code) {
-		BarcodeQRCode codeObject = new BarcodeQRCode(code);
+		var codeObject = new BarcodeQRCode(code);
+		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+		return createCodeImage(codeImage, true);
+	}
+
+	Image createDataMatrix(String code) {
+		var codeObject = new BarcodeDataMatrix(code);
 		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
 		return createCodeImage(codeImage, true);
 	}
 
 	private Image createCodeImage(PdfFormXObject codeImage, boolean setWidth) {
-		Image codeQrImage = new Image(codeImage);
+		var codeQrImage = new Image(codeImage);
 		if (setWidth) {
 			codeQrImage.setWidth(getPageWidth() / 4);
 		}
