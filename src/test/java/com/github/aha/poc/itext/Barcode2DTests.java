@@ -15,21 +15,39 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 @DisplayName("Generation of Two-dimensional (2D) codes")
 class Barcode2DTests extends AbstractTest {
 
+	String githubUrl = "https://github.com/arnosthavelka/itext-poc/";
+
 	@Test
 	void qrCode() throws IOException {
 		String title = lorem.getWords(3);
 		String targetPdf = RESULT_PATH + "/example-qrcode.pdf";
-		String qrCodeUrl = "https://github.com/arnosthavelka/itext-poc/";
 
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
 		documentBuilder.addTitle(title);
-		documentBuilder.addQrCode(qrCodeUrl);
+		documentBuilder.addQrCode(githubUrl);
 		documentBuilder.generateDocument();
 
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
 			String pdfContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
 			assertThat(pdfContent).startsWith(title);
-			assertThat(pdfContent).contains(qrCodeUrl);
+			assertThat(pdfContent).contains(githubUrl);
+		}
+	}
+
+	@Test
+	void dadaMatrixCode() throws IOException {
+		String title = lorem.getWords(3);
+		String targetPdf = RESULT_PATH + "/example-datamatrix.pdf";
+
+		DocumentBuilder documentBuilder = preparePdf(targetPdf);
+		documentBuilder.addTitle(title);
+		documentBuilder.addDataMatrix(githubUrl);
+		documentBuilder.generateDocument();
+
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+			String pdfContent = PdfTextExtractor.getTextFromPage(pdfDocument.getFirstPage(), new LocationTextExtractionStrategy());
+			assertThat(pdfContent).startsWith(title);
+			assertThat(pdfContent).contains(githubUrl);
 		}
 	}
 

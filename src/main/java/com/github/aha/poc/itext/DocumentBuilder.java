@@ -11,10 +11,16 @@ import static java.util.Objects.nonNull;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import com.itextpdf.barcodes.Barcode128;
+import com.itextpdf.barcodes.Barcode1D;
+import com.itextpdf.barcodes.Barcode2D;
 import com.itextpdf.barcodes.Barcode39;
+import com.itextpdf.barcodes.BarcodeDataMatrix;
 import com.itextpdf.barcodes.BarcodeEAN;
+import com.itextpdf.barcodes.BarcodeMSI;
+import com.itextpdf.barcodes.BarcodePostnet;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -108,8 +114,21 @@ public class DocumentBuilder {
 		document.add(createBarcodeEANImage(code));
 	}
 
+	public void addBarcodeMSI(String code) {
+		document.add(createBarcodeMSIImage(code));
+	}
+
+	public void addBarcodePostnet(String code) {
+		document.add(createBarcodePostnetImage(code));
+	}
+
 	public void addQrCode(String code) {
 		document.add(createQrCodeImage(code));
+		document.add(createParagraph(code));
+	}
+
+	public void addDataMatrix(String code) {
+		document.add(createDataMatrix(code));
 		document.add(createParagraph(code));
 	}
 
@@ -244,34 +263,58 @@ public class DocumentBuilder {
 	}
 
 	Image createBarcode39Image(String code) {
-		Barcode39 codeObject = new Barcode39(document.getPdfDocument());
-		codeObject.setCode(code);
-		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
-		return createCodeImage(codeImage, false);
+		return createBarcode1DImage(code, Barcode39.class);
 	}
 
 	Image createBarcode128Image(String code) {
-		Barcode128 codeObject = new Barcode128(document.getPdfDocument());
-		codeObject.setCode(code);
-		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
-		return createCodeImage(codeImage, false);
+		return createBarcode1DImage(code, Barcode128.class);
 	}
 
 	Image createBarcodeEANImage(String code) {
-		BarcodeEAN codeObject = new BarcodeEAN(document.getPdfDocument());
-		codeObject.setCode(code);
-		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
-		return createCodeImage(codeImage, false);
+		return createBarcode1DImage(code, BarcodeEAN.class);
+	}
+
+	Image createBarcodeMSIImage(String code) {
+		return createBarcode1DImage(code, BarcodeMSI.class);
+	}
+
+	Image createBarcodePostnetImage(String code) {
+		return createBarcode1DImage(code, BarcodePostnet.class);
+	}
+
+	private <C extends Barcode1D> Image createBarcode1DImage(String code, Class<C> barcodeClass) {
+		try {
+			var codeObject = barcodeClass.getConstructor(PdfDocument.class).newInstance(document.getPdfDocument());
+			codeObject.setCode(code);
+			PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+			return createCodeImage(codeImage, false);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			throw new ITextException("The creation of Barcode1D class " + barcodeClass.getName() + "failed", e);
+		}
 	}
 
 	Image createQrCodeImage(String code) {
-		BarcodeQRCode codeObject = new BarcodeQRCode(code);
-		PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
-		return createCodeImage(codeImage, true);
+		return createBarcode2DImage(code, BarcodeQRCode.class);
+	}
+
+	Image createDataMatrix(String code) {
+		return createBarcode2DImage(code, BarcodeDataMatrix.class);
+	}
+
+	private <C extends Barcode2D> Image createBarcode2DImage(String code, Class<C> barcodeClass) {
+		try {
+			var codeObject = barcodeClass.getConstructor(String.class).newInstance(code);
+			PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+			return createCodeImage(codeImage, true);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			throw new ITextException("The creation of Barcode2D class " + barcodeClass.getName() + "failed", e);
+		}
 	}
 
 	private Image createCodeImage(PdfFormXObject codeImage, boolean setWidth) {
-		Image codeQrImage = new Image(codeImage);
+		var codeQrImage = new Image(codeImage);
 		if (setWidth) {
 			codeQrImage.setWidth(getPageWidth() / 4);
 		}
