@@ -103,23 +103,23 @@ public class DocumentBuilder {
 	}
 
 	public void addBarcode39(String code) {
-		document.add(createBarcode39Image(code));
+		document.add(createBarcode1DImage(code, Barcode39.class));
 	}
 
 	public void addBarcode128(String code) {
-		document.add(createBarcode128Image(code));
+		document.add(createBarcode1DImage(code, Barcode128.class));
 	}
 
 	public void addBarcodeEAN(String code) {
-		document.add(createBarcodeEANImage(code));
+		document.add(createBarcode1DImage(code, BarcodeEAN.class));
 	}
 
 	public void addBarcodeMSI(String code) {
-		document.add(createBarcodeMSIImage(code));
+		document.add(createBarcode1DImage(code, BarcodeMSI.class));
 	}
 
 	public void addBarcodePostnet(String code) {
-		document.add(createBarcodePostnetImage(code));
+		document.add(createBarcode1DImage(code, BarcodePostnet.class));
 	}
 
 	public void addQrCode(String code) {
@@ -260,26 +260,6 @@ public class DocumentBuilder {
 
 	private float getPageWidth() {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
-	}
-
-	Image createBarcode39Image(String code) {
-		return createBarcode1DImage(code, Barcode39.class);
-	}
-
-	Image createBarcode128Image(String code) {
-		return createBarcode1DImage(code, Barcode128.class);
-	}
-
-	Image createBarcodeEANImage(String code) {
-		return createBarcode1DImage(code, BarcodeEAN.class);
-	}
-
-	Image createBarcodeMSIImage(String code) {
-		return createBarcode1DImage(code, BarcodeMSI.class);
-	}
-
-	Image createBarcodePostnetImage(String code) {
-		return createBarcode1DImage(code, BarcodePostnet.class);
 	}
 
 	private <C extends Barcode1D> Image createBarcode1DImage(String code, Class<C> barcodeClass) {
