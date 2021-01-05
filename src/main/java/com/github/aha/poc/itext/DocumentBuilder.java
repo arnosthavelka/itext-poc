@@ -123,12 +123,12 @@ public class DocumentBuilder {
 	}
 
 	public void addQrCode(String code) {
-		document.add(createQrCodeImage(code));
+		document.add(createBarcode2DImage(code, BarcodeQRCode.class));
 		document.add(createParagraph(code));
 	}
 
 	public void addDataMatrix(String code) {
-		document.add(createDataMatrix(code));
+		document.add(createBarcode2DImage(code, BarcodeDataMatrix.class));
 		document.add(createParagraph(code));
 	}
 
@@ -272,14 +272,6 @@ public class DocumentBuilder {
 				| SecurityException e) {
 			throw new ITextException("The creation of Barcode1D class " + barcodeClass.getName() + "failed", e);
 		}
-	}
-
-	Image createQrCodeImage(String code) {
-		return createBarcode2DImage(code, BarcodeQRCode.class);
-	}
-
-	Image createDataMatrix(String code) {
-		return createBarcode2DImage(code, BarcodeDataMatrix.class);
 	}
 
 	private <C extends Barcode2D> Image createBarcode2DImage(String code, Class<C> barcodeClass) {
