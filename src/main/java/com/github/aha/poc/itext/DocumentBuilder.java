@@ -103,32 +103,32 @@ public class DocumentBuilder {
 	}
 
 	public void addBarcode39(String code) {
-		document.add(createBarcode1DImage(code, Barcode39.class));
+		document.add(create1DBarcode(code, Barcode39.class));
 	}
 
 	public void addBarcode128(String code) {
-		document.add(createBarcode1DImage(code, Barcode128.class));
+		document.add(create1DBarcode(code, Barcode128.class));
 	}
 
 	public void addBarcodeEAN(String code) {
-		document.add(createBarcode1DImage(code, BarcodeEAN.class));
+		document.add(create1DBarcode(code, BarcodeEAN.class));
 	}
 
 	public void addBarcodeMSI(String code) {
-		document.add(createBarcode1DImage(code, BarcodeMSI.class));
+		document.add(create1DBarcode(code, BarcodeMSI.class));
 	}
 
 	public void addBarcodePostnet(String code) {
-		document.add(createBarcode1DImage(code, BarcodePostnet.class));
+		document.add(create1DBarcode(code, BarcodePostnet.class));
 	}
 
 	public void addQrCode(String code) {
-		document.add(createBarcode2DImage(code, BarcodeQRCode.class));
+		document.add(create2DBarcode(code, BarcodeQRCode.class));
 		document.add(createParagraph(code));
 	}
 
 	public void addDataMatrix(String code) {
-		document.add(createBarcode2DImage(code, BarcodeDataMatrix.class));
+		document.add(create2DBarcode(code, BarcodeDataMatrix.class));
 		document.add(createParagraph(code));
 	}
 
@@ -262,7 +262,7 @@ public class DocumentBuilder {
 		return document.getPdfDocument().getFirstPage().getPageSizeWithRotation().getWidth();
 	}
 
-	private <C extends Barcode1D> Image createBarcode1DImage(String code, Class<C> barcodeClass) {
+	private <C extends Barcode1D> Image create1DBarcode(String code, Class<C> barcodeClass) {
 		try {
 			var codeObject = barcodeClass.getConstructor(PdfDocument.class).newInstance(document.getPdfDocument());
 			codeObject.setCode(code);
@@ -274,7 +274,7 @@ public class DocumentBuilder {
 		}
 	}
 
-	private <C extends Barcode2D> Image createBarcode2DImage(String code, Class<C> barcodeClass) {
+	private <C extends Barcode2D> Image create2DBarcode(String code, Class<C> barcodeClass) {
 		try {
 			var codeObject = barcodeClass.getConstructor(String.class).newInstance(code);
 			PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
