@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.itextpdf.barcodes.BarcodeDataMatrix;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
@@ -37,13 +38,14 @@ class DzoneBarcode2DTests {
 				Document document = new Document(pdfDocument)) {
 
 			var codeObject = new BarcodeQRCode(GITHUB_URL);
-			PdfFormXObject codeImage = codeObject.createFormXObject(pdfDocument);
-			document.add(createCodeImage(pdfDocument, codeImage));
+			PdfFormXObject codeFormObject = codeObject.createFormXObject(pdfDocument);
+			Image codeImage = createCodeImage(codeFormObject);
+			document.add(codeImage);
 
 			document.add(new Paragraph(GITHUB_URL));
 
 		} catch (FileNotFoundException e) {
-			log.error("Creating PDF failed", e);
+			log.error("PDF creatiion failed", e);
 			throw new ITextException(e.getMessage());
 		}
 
@@ -61,14 +63,13 @@ class DzoneBarcode2DTests {
 				PdfDocument pdfDocument = new PdfDocument(writer);
 				Document document = new Document(pdfDocument)) {
 
-			var codeObject = new BarcodeQRCode(GITHUB_URL);
-			PdfFormXObject codeImage = codeObject.createFormXObject(pdfDocument);
-			document.add(createCodeImage(pdfDocument, codeImage));
+			var codeObject = new BarcodeDataMatrix(GITHUB_URL);
+			document.add(createCodeImage(codeObject.createFormXObject(pdfDocument)));
 
 			document.add(new Paragraph(GITHUB_URL));
 
 		} catch (FileNotFoundException e) {
-			log.error("Creating PDF failed", e);
+			log.error("PDF creatiion failed", e);
 			throw new ITextException(e.getMessage());
 		}
 
@@ -78,7 +79,7 @@ class DzoneBarcode2DTests {
 		}
 	}
 
-	private Image createCodeImage(PdfDocument pdfDocument, PdfFormXObject codeImage) {
+	private Image createCodeImage(PdfFormXObject codeImage) {
 		var codeQrImage = new Image(codeImage);
 		codeQrImage.setWidth(100);
 		return codeQrImage;
