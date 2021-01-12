@@ -23,7 +23,6 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
-import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
@@ -88,8 +87,7 @@ class DzoneBarcode1DTests {
 		try {
 			var codeObject = barcodeClass.getConstructor(PdfDocument.class).newInstance(pdfDocument);
 			codeObject.setCode(code);
-			PdfFormXObject codeImage = codeObject.createFormXObject(pdfDocument);
-			return new Image(codeImage);
+			return new Image(codeObject.createFormXObject(pdfDocument));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
 			throw new ITextException("The creation of Barcode1D class " + barcodeClass.getName() + "failed", e);
