@@ -63,8 +63,7 @@ class DzoneBarcode2DTests {
 				PdfDocument pdfDocument = new PdfDocument(writer);
 				Document document = new Document(pdfDocument)) {
 
-			var codeObject = new BarcodeDataMatrix(GITHUB_URL);
-			document.add(createCodeImage(codeObject.createFormXObject(pdfDocument)));
+			document.add(createCodeImage(new BarcodeDataMatrix(GITHUB_URL).createFormXObject(pdfDocument)));
 
 			document.add(new Paragraph(GITHUB_URL));
 
