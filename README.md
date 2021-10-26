@@ -13,7 +13,7 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 | Area          | Tool                  | Version      | Description / Usage                      |
 | ----------    | --------------------- | ------------ | ---------------------------------------- |
 | **General**   |                       |              |                                          |
-|               | iText                 | 7.1.14       | PDF generation                           |
+|               | iText                 | 7.1.17       | PDF generation                           |
 |               | Lombok                | by SB        | Simplification of Java classes           |
 |               | Spring Boot           | 2.5.6        | Just for dependency management           |
 |               | Lorem                 | 2.1          | Library for LoremIpsum texts             |
