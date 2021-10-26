@@ -4,8 +4,8 @@ import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
-import static com.itextpdf.layout.property.TextAlignment.CENTER;
-import static com.itextpdf.layout.property.VerticalAlignment.TOP;
+import static com.itextpdf.layout.properties.TextAlignment.CENTER;
+import static com.itextpdf.layout.properties.VerticalAlignment.TOP;
 import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 
