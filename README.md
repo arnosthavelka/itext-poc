@@ -21,8 +21,8 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 |               | JUnit                 | by SB        | Unit testing with JUnit5                 |
 |               | AssertJ               | by SB        | Assertions with Fluent API               |
 
-[travis-url-main]: https://travis-ci.org/arnosthavelka/itext-poc
-[travis-image]: https://travis-ci.org/arnosthavelka/itext-poc.svg?branch=master
+[travis-url-main]: https://travis-ci.com/arnosthavelka/itext-poc
+[travis-image]: https://travis-ci.com/arnosthavelka/itext-poc.svg?branch=master
 
 [sonar-url]: https://sonarcloud.io/dashboard?id=arnosthavelka_itext-poc
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=arnosthavelka_itext-poc&metric=alert_status
