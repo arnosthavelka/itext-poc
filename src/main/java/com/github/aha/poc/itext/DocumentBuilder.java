@@ -1,6 +1,7 @@
 package com.github.aha.poc.itext;
 
 import static com.itextpdf.io.font.constants.StandardFonts.HELVETICA;
+import static com.itextpdf.kernel.geom.PageSize.A4;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ALLOW_PRINTING;
 import static com.itextpdf.kernel.pdf.EncryptionConstants.ENCRYPTION_AES_256;
 import static com.itextpdf.kernel.pdf.navigation.PdfExplicitDestination.createFit;
@@ -53,7 +54,9 @@ public class DocumentBuilder {
 	Document document;
 
 	public void init(PdfProperties pdfProperties) {
-		document = new Document(createDocument(targetFile, buildWriterProperties(pdfProperties)));
+		var pdfDocument = createDocument(targetFile, buildWriterProperties(pdfProperties));
+		document = new Document(pdfDocument, A4, false); // avoid immediate flush due to NPE in watermark feature
+													     // see https://github.com/itext/itext7/pull/80
 	}
 
 	WriterProperties buildWriterProperties(PdfProperties pdfProperties) {
