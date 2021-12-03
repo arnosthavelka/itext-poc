@@ -10,16 +10,16 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 
 ## Used Technologies
 
-| Area          | Tool                  | Version      | Description / Usage                      |
-| ----------    | --------------------- | ------------ | ---------------------------------------- |
-| **General**   |                       |              |                                          |
-|               | iText                 | 7.2.0        | PDF generation                           |
-|               | Lombok                | by SB        | Simplification of Java classes           |
-|               | Spring Boot           | 2.6.0        | Just for dependency management           |
-|               | Lorem                 | 2.1          | Library for LoremIpsum texts             |
-| **Testing**   |                       |              |                                          |
-|               | JUnit                 | by SB        | Unit testing with JUnit5                 |
-|               | AssertJ               | by SB        | Assertions with Fluent API               |
+| Area          | Tool                  | Description / Usage                      |
+| ----------    | --------------------- | ---------------------------------------- |
+| **General**   |                       |                                          |
+|               | iText                 | PDF generation                           |
+|               | Lombok                | Simplification of Java classes           |
+|               | Spring Boot           | Just for dependency management           |
+|               | Lorem                 | Library for LoremIpsum texts             |
+| **Testing**   |                       |                                          |
+|               | JUnit                 | Unit testing with JUnit5                 |
+|               | AssertJ               | Assertions with Fluent API               |
 
 [travis-url-main]: https://app.travis-ci.com/github/arnosthavelka/itext-poc
 [travis-image]: https://travis-ci.com/arnosthavelka/itext-poc.svg?branch=master
