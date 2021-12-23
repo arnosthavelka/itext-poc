@@ -5,7 +5,7 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 
 ## Pre-requisities
 * JDK 17
-* Maven 3.6
+* Maven 3.8
 * Lombok (installed into the IDE)
 
 ## Used Technologies
