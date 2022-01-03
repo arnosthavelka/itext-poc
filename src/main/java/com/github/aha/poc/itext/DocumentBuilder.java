@@ -82,7 +82,7 @@ public class DocumentBuilder {
 			return new PdfDocument(writer);
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
-			throw new ITextException(e.getMessage());
+			throw new PdfException(e.getMessage());
 		}
 	}
 
@@ -238,7 +238,7 @@ public class DocumentBuilder {
 		try {
 			return createPdfFont(fontFamily);
 		} catch (IOException e) {
-			throw new ITextException("Font creation failed", e);
+			throw new PdfException("Font creation failed", e);
 		}
 	}
 
@@ -273,7 +273,7 @@ public class DocumentBuilder {
 			return createCodeImage(codeImage, false);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
-			throw new ITextException("The creation of Barcode1D class " + barcodeClass.getName() + "failed", e);
+			throw new PdfException("The creation of Barcode1D class " + barcodeClass.getName() + "failed", e);
 		}
 	}
 
@@ -284,7 +284,7 @@ public class DocumentBuilder {
 			return createCodeImage(codeImage, true);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
-			throw new ITextException("The creation of Barcode2D class " + barcodeClass.getName() + "failed", e);
+			throw new PdfException("The creation of Barcode2D class " + barcodeClass.getName() + "failed", e);
 		}
 	}
 

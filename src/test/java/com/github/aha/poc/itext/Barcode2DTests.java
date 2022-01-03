@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -12,8 +11,7 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
 
-@DisplayName("Generation of Two-dimensional (2D) codes")
-class Barcode2DTests extends AbstractTest {
+class Barcode2DTests extends AbstractPdfTest {
 
 	String githubUrl = "https://github.com/arnosthavelka/itext-poc/";
 

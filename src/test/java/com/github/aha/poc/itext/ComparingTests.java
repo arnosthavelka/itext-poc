@@ -12,8 +12,7 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.utils.CompareTool;
 import com.itextpdf.kernel.utils.CompareTool.CompareResult;
 
-@DisplayName("Compare PDF by the content")
-class ComparingTests extends AbstractTest {
+class ComparingTests extends AbstractPdfTest {
 
 	private static final String SIMPLE_PDF = "simple.pdf";
 

@@ -2,7 +2,6 @@ package com.github.aha.poc.itext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -10,8 +9,7 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
 import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStrategy;
 
-@DisplayName("verify PDF watermark feature")
-class WatermarkTests extends AbstractTest {
+class WatermarkTests extends AbstractPdfTest {
 
 	@Test
 	void watermark() throws Exception {

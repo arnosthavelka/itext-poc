@@ -19,7 +19,6 @@ import static com.itextpdf.kernel.colors.ColorConstants.WHITE;
 import static com.itextpdf.kernel.colors.ColorConstants.YELLOW;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.colors.Color;
@@ -35,8 +34,7 @@ import com.itextpdf.layout.borders.RidgeBorder;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.Paragraph;
 
-@DisplayName("Define text with differet styles")
-class StyledTextTests extends AbstractTest {
+class StyledTextTests extends AbstractPdfTest {
 
 	@Test
 	void styledText() throws Exception {

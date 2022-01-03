@@ -21,9 +21,8 @@ import com.itextpdf.layout.element.Paragraph;
 
 import lombok.extern.slf4j.Slf4j;
 
-@DisplayName("iText security features")
 @Slf4j
-class SecurityTests extends AbstractTest {
+class SecurityTests extends AbstractPdfTest {
 
 	public static final String RESULT = RESULT_PATH + "/example-encryption.pdf";
 	static final String GENERATED_SECURED_PDF = RESULT_PATH + "/example-secured.pdf";

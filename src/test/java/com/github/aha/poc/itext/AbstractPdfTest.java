@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 
-abstract class AbstractTest {
+abstract class AbstractPdfTest {
 
 	protected static final String RESULT_PATH = "target";
 

@@ -3,7 +3,6 @@ package com.github.aha.poc.itext;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDictionary;
@@ -17,9 +16,8 @@ import com.itextpdf.kernel.pdf.canvas.parser.listener.LocationTextExtractionStra
 
 import lombok.extern.slf4j.Slf4j;
 
-@DisplayName("verify PDF bookmark feature")
 @Slf4j
-class BookmarkTests extends AbstractTest {
+class BookmarkTests extends AbstractPdfTest {
 
 	@Test
 	void addTitle() throws Exception {

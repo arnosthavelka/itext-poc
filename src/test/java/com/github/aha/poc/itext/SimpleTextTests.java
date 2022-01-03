@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -28,13 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 // https://stackoverflow.com/questions/40951776/manipulate-paths-color-etc-in-itext
 // comparing PDF & Bruno's response: https://stackoverflow.com/questions/13703190/itext-api-for-pdf-comparison
 
-@DisplayName("Simple checking PDF by the text content")
 @Slf4j
-class SimpleTextTests extends AbstractTest {
+class SimpleTextTests extends AbstractPdfTest {
 
 	@Test
-	@DisplayName("Load page content as single (whole) text")
-	void loadPageContentAsValue() throws Exception {
+	void loadPageContentAsWholeText() throws Exception {
 		var title = lorem.getWords(3);
 		var content = lorem.getParagraphs(2, 4);
 

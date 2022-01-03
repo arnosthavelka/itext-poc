@@ -38,7 +38,7 @@ class DocumentBuilderTests {
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
 		given(docBuilder.createPdfWriter(SOME_FILE_PDF, writeProperties)).willThrow(FileNotFoundException.class);
 
-		assertThrows(ITextException.class, () -> docBuilder.createDocument(SOME_FILE_PDF, writeProperties));
+		assertThrows(PdfException.class, () -> docBuilder.createDocument(SOME_FILE_PDF, writeProperties));
 	}
 
 	@Test
@@ -47,7 +47,7 @@ class DocumentBuilderTests {
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
 		given(docBuilder.createPdfFont(HELVETICA)).willThrow(IOException.class);
 
-		assertThrows(ITextException.class, () -> docBuilder.createFont(HELVETICA));
+		assertThrows(PdfException.class, () -> docBuilder.createFont(HELVETICA));
 	}
 
 }

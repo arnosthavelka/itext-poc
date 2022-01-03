@@ -3,7 +3,6 @@ package com.github.aha.poc.itext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +12,7 @@ import com.itextpdf.kernel.pdf.PdfReader;
 
 // https://stackoverflow.com/questions/47609005/adding-meta-data-with-itext-7
 
-@DisplayName("verify PDF metadata feature")
-class MetadataTests extends AbstractTest {
+class MetadataTests extends AbstractPdfTest {
 
 	private static final String VERSION_PROPERTY = "version";
 
