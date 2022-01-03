@@ -88,4 +88,18 @@
 		</profile>
 	</profiles>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>external.atlassian.jgitflow</groupId>
+				<artifactId>jgitflow-maven-plugin</artifactId>
+				<version>1.0-m5.1</version>
+				<configuration>
+					<!-- Prevents deployments since there's no maven repo -->
+					<noDeploy>true</noDeploy>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 </project>
