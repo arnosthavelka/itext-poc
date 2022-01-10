@@ -22,7 +22,7 @@ This repository holds examples for testing/validation of [iText 7](https://githu
 |               | AssertJ               | Assertions with Fluent API               |
 
 [travis-url-main]: https://app.travis-ci.com/github/arnosthavelka/itext-poc
-[travis-image]: https://travis-ci.com/arnosthavelka/itext-poc.svg?branch=master
+[travis-image]: https://travis-ci.com/arnosthavelka/itext-poc.svg?branch=develop
 
 [sonar-url]: https://sonarcloud.io/dashboard?id=arnosthavelka_itext-poc
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=arnosthavelka_itext-poc&metric=alert_status
