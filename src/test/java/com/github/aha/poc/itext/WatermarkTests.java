@@ -43,11 +43,7 @@ class WatermarkTests extends AbstractPdfTest {
 		documentBuilder.addWatermark(PREVIEW);
 		documentBuilder.generateDocument();
 
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
-			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
-				assertThat(getTextFromPage(pdfDocument.getPage(i), new LocationTextExtractionStrategy())).contains(PREVIEW);
-			}
-		}
+		verifyPreviewWatermark(targetPdf);
 	}
 
 	@Test
@@ -57,9 +53,19 @@ class WatermarkTests extends AbstractPdfTest {
 			var document = new Document(pdfDoc);
 			addWatermark(document, PREVIEW);
 		}
+
+		verifyPreviewWatermark(targetPdf);
 	}
 
-	public void addWatermark(Document document, String watermark) {
+	private void verifyPreviewWatermark(String targetPdf) throws IOException {
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
+				assertThat(getTextFromPage(pdfDocument.getPage(i), new LocationTextExtractionStrategy())).contains(PREVIEW);
+			}
+		}
+	}
+
+	void addWatermark(Document document, String watermark) {
 		float fontSize = 100;
 		Paragraph paragraph = createWatermarkParagraph(watermark);
 
@@ -70,7 +76,7 @@ class WatermarkTests extends AbstractPdfTest {
 		}
 	}
 
-	private void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
+	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
 		PdfDocument pdfDoc = document.getPdfDocument();
 		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
 		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
@@ -85,7 +91,7 @@ class WatermarkTests extends AbstractPdfTest {
 		over.restoreState();
 	}
 
-	private Paragraph createWatermarkParagraph(String watermark) {
+	Paragraph createWatermarkParagraph(String watermark) {
 		var text = new Text(watermark);
 		text.setFont(createFont(HELVETICA));
 		text.setFontSize(100);
