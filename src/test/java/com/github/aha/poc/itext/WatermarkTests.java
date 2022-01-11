@@ -57,7 +57,7 @@ class WatermarkTests extends AbstractPdfTest {
 		verifyPreviewWatermark(targetPdf);
 	}
 
-	private void verifyPreviewWatermark(String targetPdf) throws IOException {
+	void verifyPreviewWatermark(String targetPdf) throws IOException {
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
 			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
 				assertThat(getTextFromPage(pdfDocument.getPage(i), new LocationTextExtractionStrategy())).contains(PREVIEW);
