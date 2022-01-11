@@ -78,8 +78,7 @@ public class DocumentBuilder {
 
 	PdfDocument createDocument(String targetFilename, WriterProperties writerProperties) {
 		try {
-			PdfWriter writer = createPdfWriter(targetFilename, writerProperties);
-			return new PdfDocument(writer);
+			return new PdfDocument(createPdfWriter(targetFilename, writerProperties));
 		} catch (FileNotFoundException e) {
 			log.error("Creating PDF failed", e);
 			throw new PdfException(e.getMessage());
