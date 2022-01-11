@@ -15,7 +15,6 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
@@ -31,7 +30,7 @@ class WatermarkTests extends AbstractPdfTest {
 	static final String PREVIEW = "PREVIEW";
 
 	@Test
-	void generateWatermarkInPdf() throws IOException {
+	void generateWatermarkToPdf() throws IOException {
 		String targetPdf = RESULT_PATH + "/example-watermark-generated.pdf";
 		var title = lorem.getWords(3);
 
@@ -47,7 +46,7 @@ class WatermarkTests extends AbstractPdfTest {
 	}
 
 	@Test
-	void modifyPdfWithWatermak() throws IOException {
+	void addWatermarkToExistingPdf() throws IOException {
 		String targetPdf = RESULT_PATH + "/example-watermark-modified.pdf";
 		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
 			var document = new Document(pdfDoc);
@@ -67,9 +66,8 @@ class WatermarkTests extends AbstractPdfTest {
 
 	void addWatermark(Document document, String watermark) {
 		float fontSize = 100;
-		Paragraph paragraph = createWatermarkParagraph(watermark);
-
-		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
+		var paragraph = createWatermarkParagraph(watermark, fontSize);
+		var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
 		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
 			addWatermarkToPage(document, i, paragraph, transparentGraphicState, fontSize);
@@ -77,8 +75,8 @@ class WatermarkTests extends AbstractPdfTest {
 	}
 
 	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
-		PdfDocument pdfDoc = document.getPdfDocument();
-		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
+		var pdfDoc = document.getPdfDocument();
+		var pdfPage = pdfDoc.getPage(pageIndex);
 		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
@@ -91,10 +89,10 @@ class WatermarkTests extends AbstractPdfTest {
 		over.restoreState();
 	}
 
-	Paragraph createWatermarkParagraph(String watermark) {
+	Paragraph createWatermarkParagraph(String watermark, float fontSize) {
 		var text = new Text(watermark);
 		text.setFont(createFont(HELVETICA));
-		text.setFontSize(100);
+		text.setFontSize(fontSize);
 		text.setFontColor(BLUE);
 		return new Paragraph(text);
 	}
