@@ -85,7 +85,7 @@ class WatermarkTests extends AbstractPdfTest {
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
+		var over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
 		float xOffset = fontSize / 2;

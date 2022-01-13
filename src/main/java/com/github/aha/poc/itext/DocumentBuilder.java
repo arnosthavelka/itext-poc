@@ -157,9 +157,8 @@ public class DocumentBuilder {
 
 	public void addWatermark(String watermark) {
 		float fontSize = 100;
-		Paragraph paragraph = createStyledParagraph(watermark, ParagraphStyle.builder().fontName(HELVETICA).fontSize(fontSize).build());
-
-		PdfExtGState transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
+		var paragraph = createStyledParagraph(watermark, ParagraphStyle.builder().fontName(HELVETICA).fontSize(fontSize).build());
+		var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
 		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
 			addWatermarkToPage(i, paragraph, transparentGraphicState, fontSize);
@@ -252,7 +251,7 @@ public class DocumentBuilder {
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
+		var over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
 		float xOffset = fontSize / 2;
