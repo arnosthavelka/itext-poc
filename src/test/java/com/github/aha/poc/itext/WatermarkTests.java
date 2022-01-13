@@ -28,20 +28,26 @@ import com.itextpdf.layout.element.Text;
 class WatermarkTests extends AbstractPdfTest {
 
 	static final String SOURCE_PDF = "simple.pdf";
-	static final float ROTATION_20_DEGREE = (float) (PI / 180 * 20);
 
 	@Test
 	void generateWatermarkToPdf() throws IOException {
 		String targetPdf = RESULT_PATH + "/example-watermark-generated.pdf";
 		var title = lorem.getWords(3);
 		var watermark = "PREVIEW";
+		var textStyle = TextStyle.builder()
+				.fontFamily(HELVETICA)
+				.fontSize(100f)
+				.rotationInDegrees(45f)
+				.build();
+
 
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
 		documentBuilder.addTitle(title);
 		documentBuilder.addParagraph(lorem.getParagraphs(2, 10));
 		documentBuilder.addParagraph(lorem.getParagraphs(6, 10));
 		documentBuilder.addParagraph(lorem.getParagraphs(3, 10));
-		documentBuilder.addWatermark(watermark);
+//		documentBuilder.addWatermark(watermark);
+		addWatermark(documentBuilder.document, watermark, textStyle, 0f);
 		documentBuilder.generateDocument();
 
 		verifyPreviewWatermark(targetPdf, watermark);
@@ -51,10 +57,16 @@ class WatermarkTests extends AbstractPdfTest {
 	void addWatermarkToExistingPdf() throws IOException {
 		String targetPdf = RESULT_PATH + "/example-watermark-modified.pdf";
 		var watermark = "CONFIDENTIAL";
+		var textStyle = TextStyle.builder()
+				.color(BLUE)
+				.fontFamily(HELVETICA)
+				.fontSize(50f)
+				.rotationInDegrees(20f)
+				.build();
 
 		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
 			var document = new Document(pdfDoc);
-			addWatermark(document, watermark);
+			addWatermark(document, watermark, textStyle, 330f);
 		}
 
 		verifyPreviewWatermark(targetPdf, watermark);
@@ -68,37 +80,37 @@ class WatermarkTests extends AbstractPdfTest {
 		}
 	}
 
-	void addWatermark(Document document, String watermark) {
-		float fontSize = 50;
-		var paragraph = createWatermarkParagraph(watermark, fontSize);
+	void addWatermark(Document document, String watermark, TextStyle textStyle, float verticalOffset) {
+		var paragraph = createWatermarkParagraph(watermark, textStyle);
 		var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
 
 		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
-			addWatermarkToPage(document, i, paragraph, transparentGraphicState, fontSize);
+			addWatermarkToPage(document, i, paragraph, transparentGraphicState, textStyle, verticalOffset);
 		}
 	}
 
-	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
+	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, TextStyle textStyle,
+			float verticalOffset) {
 		var pdfDoc = document.getPdfDocument();
 		var pdfPage = pdfDoc.getPage(pageIndex);
 		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-		PdfCanvas over = new PdfCanvas(pdfDoc.getPage(pageIndex));
+		var over = new PdfCanvas(pdfDoc.getPage(pageIndex));
 		over.saveState();
 		over.setExtGState(graphicState);
-		float xOffset = fontSize / 2;
-		float yOffset = 330f;
-		document.showTextAligned(paragraph, x - xOffset, y + yOffset, pageIndex, CENTER, TOP, ROTATION_20_DEGREE);
+		float xOffset = textStyle.getFontSize() / 2;
+		float rotationInRadians = (float) (PI / 180 * textStyle.getRotationInDegrees());
+		document.showTextAligned(paragraph, x - xOffset, y + verticalOffset, pageIndex, CENTER, TOP, rotationInRadians);
 		over.restoreState();
 	}
 
-	Paragraph createWatermarkParagraph(String watermark, float fontSize) {
+	Paragraph createWatermarkParagraph(String watermark, TextStyle textStyle) {
 		var text = new Text(watermark);
-		text.setFont(createFont(HELVETICA));
-		text.setFontSize(fontSize);
-		text.setFontColor(BLUE);
+		text.setFont(createFont(textStyle.getFontFamily()));
+		text.setFontSize(textStyle.getFontSize());
+		text.setFontColor(textStyle.getColor());
 		return new Paragraph(text);
 	}
 

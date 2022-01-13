@@ -17,5 +17,6 @@ public class TextStyle {
 	private boolean italic;
 	private boolean underline;
 	private boolean lineThrough;
+	private Float rotationInDegrees;
 
 }
