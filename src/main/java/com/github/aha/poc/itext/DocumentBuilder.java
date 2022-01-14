@@ -90,7 +90,7 @@ public class DocumentBuilder {
 	}
 
 	public void addTitle(String title) {
-		Paragraph titleElement = createParagraph(title);
+		Paragraph titleElement = createStyledParagraph(title, ParagraphStyle.builder().fontName(HELVETICA).fontSize(20f).build());
 		titleElement.setBold();
 		document.add(titleElement);
 		addMetadata(title, null, null, null);
