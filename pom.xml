@@ -24,7 +24,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>17</java.version>
 		<jacoco.version>0.8.7</jacoco.version>
-		<itext.version>7.2.0</itext.version>
+		<itext.version>7.2.1</itext.version>
 		<lorem.version>2.1</lorem.version>
 	</properties>
 

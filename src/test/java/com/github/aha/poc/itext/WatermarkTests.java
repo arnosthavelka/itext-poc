@@ -104,6 +104,7 @@ class WatermarkTests extends AbstractPdfTest {
 		float rotationInRadians = (float) (PI / 180 * textStyle.getRotationInDegrees());
 		document.showTextAligned(paragraph, x - xOffset, y + verticalOffset, pageIndex, CENTER, TOP, rotationInRadians);
 		over.restoreState();
+		over.release();
 	}
 
 	Paragraph createWatermarkParagraph(String watermark, TextStyle textStyle) {
