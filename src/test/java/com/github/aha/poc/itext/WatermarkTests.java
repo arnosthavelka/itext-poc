@@ -97,9 +97,11 @@ class WatermarkTests extends AbstractPdfTest {
 	}
 
 	void verifyPreviewWatermark(String targetPdf, String watermark) throws IOException {
+		var extStrategy = new LocationTextExtractionStrategy();
 		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
 			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
-				assertThat(getTextFromPage(pdfDocument.getPage(i), new LocationTextExtractionStrategy())).contains(watermark);
+				var textFromPage = getTextFromPage(pdfDocument.getPage(i), extStrategy);
+				assertThat(textFromPage).contains(watermark);
 			}
 		}
 	}
