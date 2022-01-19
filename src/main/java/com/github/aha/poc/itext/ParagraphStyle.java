@@ -15,5 +15,6 @@ public class ParagraphStyle {
 	private Border border;
 	private Float margin;
 	private Float padding;
+	private Float opacity;
 
 }

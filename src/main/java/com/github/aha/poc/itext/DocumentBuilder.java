@@ -25,15 +25,9 @@ import com.itextpdf.barcodes.BarcodePostnet;
 import com.itextpdf.barcodes.BarcodeQRCode;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfDocumentInfo;
-import com.itextpdf.kernel.pdf.PdfOutline;
-import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.kernel.pdf.extgstate.PdfExtGState;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
@@ -60,7 +54,7 @@ public class DocumentBuilder {
 	}
 
 	WriterProperties buildWriterProperties(PdfProperties pdfProperties) {
-		WriterProperties wp = new WriterProperties();
+		var wp = new WriterProperties();
 		wp.addXmpMetadata();
 		if (nonNull(pdfProperties.getPdfVersion())) {
 			wp.setPdfVersion(pdfProperties.getPdfVersion());
@@ -86,11 +80,11 @@ public class DocumentBuilder {
 	}
 
 	PdfWriter createPdfWriter(String targetFilename, WriterProperties writerProperties) throws FileNotFoundException {
-		return new PdfWriter(targetFilename, writerProperties); // NOSONAR
+		return new PdfWriter(targetFilename, writerProperties);
 	}
 
 	public void addTitle(String title) {
-		Paragraph titleElement = createStyledParagraph(title, ParagraphStyle.builder().fontName(HELVETICA).fontSize(20f).build());
+		var titleElement = createStyledParagraph(title, ParagraphStyle.builder().fontName(HELVETICA).fontSize(20f).build());
 		titleElement.setBold();
 		document.add(titleElement);
 		addMetadata(title, null, null, null);
@@ -135,7 +129,7 @@ public class DocumentBuilder {
 	}
 
 	public void addMetadata(String title, String subject, String author, String creator) {
-		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
+		var documentInfo = document.getPdfDocument().getDocumentInfo();
 		if (nonNull(title)) {
 			documentInfo.setTitle(title);
 		}
@@ -151,23 +145,26 @@ public class DocumentBuilder {
 	}
 
 	public void addCustomMetadadata(@NonNull String key, @NonNull String value) {
-		PdfDocumentInfo documentInfo = document.getPdfDocument().getDocumentInfo();
+		var documentInfo = document.getPdfDocument().getDocumentInfo();
 		documentInfo.setMoreInfo(key, value);
 	}
 
 	public void addWatermark(String watermark) {
 		float fontSize = 100;
-		var paragraph = createStyledParagraph(watermark, ParagraphStyle.builder().fontName(HELVETICA).fontSize(fontSize).build());
-		var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
+		var paragraph = createStyledParagraph(watermark, ParagraphStyle.builder()
+				.fontName(HELVETICA)
+				.fontSize(fontSize)
+				.opacity(0.5f)
+				.build());
 
 		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
-			addWatermarkToPage(i, paragraph, transparentGraphicState, fontSize);
+			addWatermarkToPage(i, paragraph, fontSize);
 		}
 	}
 
 	public void addBookmark(String title) {
-		PdfOutline outlines = document.getPdfDocument().getOutlines(false);
-		PdfOutline newOutline = outlines.addOutline(title);
+		var outlines = document.getPdfDocument().getOutlines(false);
+		var newOutline = outlines.addOutline(title);
 		newOutline.addDestination(createFit(document.getPdfDocument().getLastPage()));
 	}
 
@@ -176,7 +173,7 @@ public class DocumentBuilder {
 	}
 
 	Paragraph createStyledParagraph(String content, ParagraphStyle paragraphStyle) {
-		Paragraph paragraph = new Paragraph(content);
+		var paragraph = new Paragraph(content);
 		if (nonNull(paragraphStyle.getFontName())) {
 			paragraph.setFont(createFont(paragraphStyle.getFontName()));
 		}
@@ -195,11 +192,14 @@ public class DocumentBuilder {
 		if (nonNull(paragraphStyle.getPadding())) {
 			paragraph.setPadding(paragraphStyle.getPadding());
 		}
+		if (nonNull(paragraphStyle.getOpacity())) {
+			paragraph.setOpacity(paragraphStyle.getOpacity());
+		}
 		return paragraph;
 	}
 
 	public Text createStyledText(String label, TextStyle textStyle) {
-		Text text = new Text(label);
+		var text = new Text(label);
 		if (nonNull(textStyle.getColor())) {
 			text.setFontColor(textStyle.getColor());
 		}
@@ -244,19 +244,15 @@ public class DocumentBuilder {
 		return PdfFontFactory.createFont(fontFamily);
 	}
 
-	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, PdfExtGState graphicState, float fontSize) {
-		PdfDocument pdfDoc = document.getPdfDocument();
-		PdfPage pdfPage = pdfDoc.getPage(pageIndex);
-		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
+	private void addWatermarkToPage(int pageIndex, Paragraph paragraph, float fontSize) {
+		var pdfDoc = document.getPdfDocument();
+		var pdfPage = pdfDoc.getPage(pageIndex);
+		var pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
-		var over = new PdfCanvas(pdfDoc.getPage(pageIndex));
-		over.saveState();
-		over.setExtGState(graphicState);
 		float xOffset = fontSize / 2;
 		document.showTextAligned(paragraph, x - xOffset, y, pageIndex, CENTER, TOP, (float) calculateRadiusFromDegree(45f));
-		over.restoreState();
 	}
 
 	private float getPageWidth() {
@@ -267,7 +263,7 @@ public class DocumentBuilder {
 		try {
 			var codeObject = barcodeClass.getConstructor(PdfDocument.class).newInstance(document.getPdfDocument());
 			codeObject.setCode(code);
-			PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+			var codeImage = codeObject.createFormXObject(document.getPdfDocument());
 			return createCodeImage(codeImage, false);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
@@ -278,7 +274,7 @@ public class DocumentBuilder {
 	private <C extends Barcode2D> Image create2DBarcode(String code, Class<C> barcodeClass) {
 		try {
 			var codeObject = barcodeClass.getConstructor(String.class).newInstance(code);
-			PdfFormXObject codeImage = codeObject.createFormXObject(document.getPdfDocument());
+			var codeImage = codeObject.createFormXObject(document.getPdfDocument());
 			return createCodeImage(codeImage, true);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {

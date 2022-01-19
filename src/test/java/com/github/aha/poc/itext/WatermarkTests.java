@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -34,20 +33,13 @@ class WatermarkTests extends AbstractPdfTest {
 		String targetPdf = RESULT_PATH + "/example-watermark-generated.pdf";
 		var title = lorem.getWords(3);
 		var watermark = "PREVIEW";
-		var textStyle = TextStyle.builder()
-				.fontFamily(HELVETICA)
-				.fontSize(100f)
-				.rotationInDegrees(45f)
-				.build();
-
 
 		DocumentBuilder documentBuilder = preparePdf(targetPdf);
 		documentBuilder.addTitle(title);
 		documentBuilder.addParagraph(lorem.getParagraphs(2, 10));
 		documentBuilder.addParagraph(lorem.getParagraphs(6, 10));
 		documentBuilder.addParagraph(lorem.getParagraphs(3, 10));
-//		documentBuilder.addWatermark(watermark);
-		addWatermark(documentBuilder.document, watermark, textStyle, 0f);
+		documentBuilder.addWatermark(watermark);
 		documentBuilder.generateDocument();
 
 		verifyPreviewWatermark(targetPdf, watermark);
@@ -62,6 +54,7 @@ class WatermarkTests extends AbstractPdfTest {
 				.fontFamily(HELVETICA)
 				.fontSize(50f)
 				.rotationInDegrees(20f)
+				.opacity(0.5f)
 				.build();
 
 		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
@@ -93,7 +86,7 @@ class WatermarkTests extends AbstractPdfTest {
 			float verticalOffset) {
 		var pdfDoc = document.getPdfDocument();
 		var pdfPage = pdfDoc.getPage(pageIndex);
-		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
+		var pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
@@ -112,6 +105,7 @@ class WatermarkTests extends AbstractPdfTest {
 		text.setFont(createFont(textStyle.getFontFamily()));
 		text.setFontSize(textStyle.getFontSize());
 		text.setFontColor(textStyle.getColor());
+		text.setOpacity(textStyle.getOpacity());
 		return new Paragraph(text);
 	}
 
