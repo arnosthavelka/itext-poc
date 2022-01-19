@@ -8,15 +8,12 @@ import static com.itextpdf.layout.properties.VerticalAlignment.TOP;
 import static java.lang.Math.PI;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import com.itextpdf.commons.exceptions.ITextException;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -27,9 +24,6 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 class WatermarkTests extends AbstractPdfTest {
 
 	static final String SOURCE_PDF = "simple.pdf";
@@ -59,6 +53,7 @@ class WatermarkTests extends AbstractPdfTest {
 				.fontFamily(HELVETICA)
 				.fontSize(100f)
 				.rotationInDegrees(45f)
+				.opacity(0.5f)
 				.build();
 
 		try (PdfWriter writer = new PdfWriter(targetPdf);
@@ -67,14 +62,26 @@ class WatermarkTests extends AbstractPdfTest {
 
 			document.add(new Paragraph(text1));
 			document.add(new Paragraph(text2));
-			addWatermark(document, watermark, textStyle, 0f);
 
-		} catch (FileNotFoundException e) {
-			log.error("Creating PDF failed", e);
-			throw new ITextException(e.getMessage());
+			var paragraph = createWatermarkParagraph(watermark, textStyle);
+			for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
+				addWatermarkToPage(document, i, paragraph, textStyle, 0f);
+			}
 		}
 
 		verifyPreviewWatermark(targetPdf, watermark);
+	}
+
+	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, TextStyle textStyle, float verticalOffset) {
+		var pdfDoc = document.getPdfDocument();
+		var pdfPage = pdfDoc.getPage(pageIndex);
+		var pageSize = pdfPage.getPageSizeWithRotation();
+
+		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
+		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
+		float xOffset = textStyle.getFontSize() / 2;
+		float rotationInRadians = (float) (PI / 180 * textStyle.getRotationInDegrees());
+		document.showTextAligned(paragraph, x - xOffset, y + verticalOffset, pageIndex, CENTER, TOP, rotationInRadians);
 	}
 
 	@Test
@@ -86,40 +93,27 @@ class WatermarkTests extends AbstractPdfTest {
 				.fontFamily(HELVETICA)
 				.fontSize(50f)
 				.rotationInDegrees(20f)
+				.opacity(0.5f)
 				.build();
 
 		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
 			var document = new Document(pdfDoc);
-			addWatermark(document, watermark, textStyle, 330f);
+
+			var paragraph = createWatermarkParagraph(watermark, textStyle);
+			var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
+			for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
+				addWatermarkToPage(document, i, paragraph, transparentGraphicState, textStyle, 330f);
+			}
 		}
 
 		verifyPreviewWatermark(targetPdf, watermark);
-	}
-
-	void verifyPreviewWatermark(String targetPdf, String watermark) throws IOException {
-		var extStrategy = new LocationTextExtractionStrategy();
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
-			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
-				var textFromPage = getTextFromPage(pdfDocument.getPage(i), extStrategy);
-				assertThat(textFromPage).contains(watermark);
-			}
-		}
-	}
-
-	void addWatermark(Document document, String watermark, TextStyle textStyle, float verticalOffset) {
-		var paragraph = createWatermarkParagraph(watermark, textStyle);
-		var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
-
-		for (int i = 1; i <= document.getPdfDocument().getNumberOfPages(); i++) {
-			addWatermarkToPage(document, i, paragraph, transparentGraphicState, textStyle, verticalOffset);
-		}
 	}
 
 	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, PdfExtGState graphicState, TextStyle textStyle,
 			float verticalOffset) {
 		var pdfDoc = document.getPdfDocument();
 		var pdfPage = pdfDoc.getPage(pageIndex);
-		Rectangle pageSize = pdfPage.getPageSizeWithRotation();
+		var pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
 		float y = (pageSize.getTop() + pageSize.getBottom()) / 2;
@@ -129,6 +123,7 @@ class WatermarkTests extends AbstractPdfTest {
 		float xOffset = textStyle.getFontSize() / 2;
 		float rotationInRadians = (float) (PI / 180 * textStyle.getRotationInDegrees());
 		document.showTextAligned(paragraph, x - xOffset, y + verticalOffset, pageIndex, CENTER, TOP, rotationInRadians);
+		document.flush();
 		over.restoreState();
 		over.release();
 	}
@@ -138,6 +133,7 @@ class WatermarkTests extends AbstractPdfTest {
 		text.setFont(createFont(textStyle.getFontFamily()));
 		text.setFontSize(textStyle.getFontSize());
 		text.setFontColor(textStyle.getColor());
+		text.setOpacity(textStyle.getOpacity());
 		return new Paragraph(text);
 	}
 
@@ -146,6 +142,16 @@ class WatermarkTests extends AbstractPdfTest {
 			return PdfFontFactory.createFont(fontFamily);
 		} catch (IOException e) {
 			throw new PdfException("Font creation failed", e);
+		}
+	}
+
+	void verifyPreviewWatermark(String targetPdf, String watermark) throws IOException {
+		var extStrategy = new LocationTextExtractionStrategy();
+		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
+				var textFromPage = getTextFromPage(pdfDocument.getPage(i), extStrategy);
+				assertThat(textFromPage).contains(watermark);
+			}
 		}
 	}
 

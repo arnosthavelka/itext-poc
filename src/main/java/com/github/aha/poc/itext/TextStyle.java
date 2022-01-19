@@ -18,5 +18,6 @@ public class TextStyle {
 	private boolean underline;
 	private boolean lineThrough;
 	private Float rotationInDegrees;
+	private Float opacity;
 
 }
