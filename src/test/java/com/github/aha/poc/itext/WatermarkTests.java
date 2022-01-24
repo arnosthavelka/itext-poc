@@ -73,8 +73,7 @@ class WatermarkTests extends AbstractPdfTest {
 	}
 
 	void addWatermarkToPage(Document document, int pageIndex, Paragraph paragraph, TextStyle textStyle, float verticalOffset) {
-		var pdfDoc = document.getPdfDocument();
-		var pdfPage = pdfDoc.getPage(pageIndex);
+		var pdfPage = document.getPdfDocument().getPage(pageIndex);
 		var pageSize = pdfPage.getPageSizeWithRotation();
 
 		float x = (pageSize.getLeft() + pageSize.getRight()) / 2;
