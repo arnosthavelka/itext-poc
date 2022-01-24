@@ -57,8 +57,8 @@ class WatermarkTests extends AbstractPdfTest {
 				.opacity(0.5f)
 				.build();
 
-		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
-			var document = new Document(pdfDoc);
+		try (var pdfDocument = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
+			var document = new Document(pdfDocument);
 			addWatermark(document, watermark, textStyle, 330f);
 		}
 
@@ -66,7 +66,7 @@ class WatermarkTests extends AbstractPdfTest {
 	}
 
 	void verifyPreviewWatermark(String targetPdf, String watermark) throws IOException {
-		try (PdfDocument pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
+		try (var pdfDocument = new PdfDocument(new PdfReader(targetPdf))) {
 			for (int i = 1; i <= pdfDocument.getNumberOfPages(); i++) {
 				assertThat(getTextFromPage(pdfDocument.getPage(i), new LocationTextExtractionStrategy())).contains(watermark);
 			}
