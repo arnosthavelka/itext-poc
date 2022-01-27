@@ -56,9 +56,9 @@ class WatermarkTests extends AbstractPdfTest {
 				.opacity(0.5f)
 				.build();
 
-		try (PdfWriter writer = new PdfWriter(targetPdf);
-				PdfDocument pdfDocument = new PdfDocument(writer);
-				Document document = new Document(pdfDocument)) {
+		try (var writer = new PdfWriter(targetPdf);
+				var pdfDocument = new PdfDocument(writer);
+				var document = new Document(pdfDocument)) {
 
 			document.add(new Paragraph(text1));
 			document.add(new Paragraph(text2));
@@ -95,8 +95,8 @@ class WatermarkTests extends AbstractPdfTest {
 				.opacity(0.5f)
 				.build();
 
-		try (var pdfDoc = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
-			var document = new Document(pdfDoc);
+		try (var pdfDocument = new PdfDocument(new PdfReader(SOURCE_PDF), new PdfWriter(targetPdf))) {
+			var document = new Document(pdfDocument);
 
 			var paragraph = createWatermarkParagraph(watermark, textStyle);
 			var transparentGraphicState = new PdfExtGState().setFillOpacity(0.5f);
