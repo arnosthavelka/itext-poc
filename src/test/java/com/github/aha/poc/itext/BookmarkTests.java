@@ -36,7 +36,7 @@ class BookmarkTests extends AbstractPdfTest {
 			PdfNameTree destsTree = pdfDocument.getCatalog().getNameTree(PdfName.Dests);
 			PdfOutline outlines = pdfDocument.getOutlines(false);
 			outlines.getAllChildren().forEach(b -> {
-				int pageNumber = pdfDocument.getPageNumber((PdfDictionary) b.getDestination().getDestinationPage(destsTree.getNames()));
+				int pageNumber = pdfDocument.getPageNumber((PdfDictionary) b.getDestination().getDestinationPage(destsTree));
 				log.debug("Bookmark '{}' was found on page {}", b.getTitle(), pageNumber);
 				assertThat(parts).contains(b.getTitle());
 				assertThat(PdfTextExtractor.getTextFromPage(pdfDocument.getPage(pageNumber), new LocationTextExtractionStrategy()))
