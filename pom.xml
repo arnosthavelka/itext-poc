@@ -6,7 +6,7 @@
 
 	<groupId>com.github.aha.poc.itext</groupId>
 	<artifactId>itext-poc</artifactId>
-	<version>0.2.4-SNAPSHOT</version>
+	<version>0.2.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>itext-poc</name>
@@ -22,7 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 		<jacoco.version>0.8.10</jacoco.version>
 		<itext.version>8.0.1</itext.version>
 		<lorem.version>2.1</lorem.version>
