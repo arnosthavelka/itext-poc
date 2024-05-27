@@ -4,8 +4,8 @@
 This repository holds examples for testing/validation of [iText 7](https://github.com/itext/itext7) features.
 
 ## Pre-requisities
-* JDK 21
-* Maven 3.8
+* JDK 22
+* Maven 3.9
 * Lombok (installed into the IDE)
 
 ## Used Technologies
