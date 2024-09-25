@@ -22,7 +22,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>22</java.version>
+		<java.version>23</java.version>
+		<maven.compiler.proc>full</maven.compiler.proc>
 		<jacoco.version>0.8.12</jacoco.version>
 		<itext.version>8.0.5</itext.version>
 		<lorem.version>2.1</lorem.version>
