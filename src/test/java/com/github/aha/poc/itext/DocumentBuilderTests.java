@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -29,10 +28,10 @@ class DocumentBuilderTests {
 	}
 
 	@Test
-	void failOnFileNotFoundException() throws FileNotFoundException {
+	void failOnFileNotFoundException() throws IOException {
 		var writeProperties = mock(WriterProperties.class);
 		var docBuilder = spy(new DocumentBuilder(SOME_FILE_PDF));
-		given(docBuilder.createPdfWriter(SOME_FILE_PDF, writeProperties)).willThrow(FileNotFoundException.class);
+		given(docBuilder.createPdfWriter(SOME_FILE_PDF, writeProperties)).willThrow(IOException.class);
 
 		assertThrows(PdfException.class, () -> docBuilder.createDocument(SOME_FILE_PDF, writeProperties));
 	}

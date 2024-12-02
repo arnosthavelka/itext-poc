@@ -6,7 +6,7 @@
 
 	<groupId>com.github.aha.poc.itext</groupId>
 	<artifactId>itext-poc</artifactId>
-	<version>0.2.7-SNAPSHOT</version>
+	<version>0.2.8-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>itext-poc</name>
@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.4</version>
+		<version>3.4.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -25,7 +25,7 @@
 		<java.version>23</java.version>
 		<maven.compiler.proc>full</maven.compiler.proc>
 		<jacoco.version>0.8.12</jacoco.version>
-		<itext.version>8.0.5</itext.version>
+		<itext.version>9.0.0</itext.version>
 		<lorem.version>2.1</lorem.version>
 	</properties>
 
