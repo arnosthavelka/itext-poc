@@ -10,7 +10,6 @@ import static com.itextpdf.layout.properties.VerticalAlignment.TOP;
 import static java.lang.Math.PI;
 import static java.util.Objects.nonNull;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
@@ -73,19 +72,19 @@ public class DocumentBuilder {
 	PdfDocument createDocument(String targetFilename, WriterProperties writerProperties) {
 		try {
 			return new PdfDocument(createPdfWriter(targetFilename, writerProperties));
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			log.error("Creating PDF failed", e);
 			throw new PdfException(e.getMessage());
 		}
 	}
 
-	PdfWriter createPdfWriter(String targetFilename, WriterProperties writerProperties) throws FileNotFoundException {
+	PdfWriter createPdfWriter(String targetFilename, WriterProperties writerProperties) throws IOException {
 		return new PdfWriter(targetFilename, writerProperties);
 	}
 
 	public void addTitle(String title) {
 		var titleElement = createStyledParagraph(title, ParagraphStyle.builder().fontName(HELVETICA).fontSize(20f).build());
-		titleElement.setBold();
+		titleElement.simulateBold();
 		document.add(titleElement);
 		addMetadata(title, null, null, null);
 	}
@@ -213,10 +212,10 @@ public class DocumentBuilder {
 			text.setFontSize(textStyle.getFontSize());
 		}
 		if (textStyle.isBold()) {
-			text.setBold();
+			text.simulateBold();
 		}
 		if (textStyle.isItalic()) {
-			text.setItalic();
+			text.simulateItalic();
 		}
 		if (textStyle.isUnderline()) {
 			text.setUnderline();
