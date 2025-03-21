@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
+		<version>3.4.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -24,8 +24,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>23</java.version>
 		<maven.compiler.proc>full</maven.compiler.proc>
-		<jacoco.version>0.8.12</jacoco.version>
-		<itext.version>9.0.0</itext.version>
+		<jacoco.version>0.8.13</jacoco.version>
+		<itext.version>9.1.0</itext.version>
 		<lorem.version>2.1</lorem.version>
 	</properties>
 
